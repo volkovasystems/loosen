@@ -1,0 +1,29 @@
+{
+  "name": "loosen",
+  "version": "0.0.0",
+  "description": "Transform deep object into shallow object.",
+  "main": "loosen.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/volkovasystems/loosen.git"
+  },
+  "keywords": [
+    "deep",
+    "shallow",
+    "object",
+    "loosen"
+  ],
+  "author": "Richeve S. Bebebdor <richeve.bebedor@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/volkovasystems/loosen/issues"
+  },
+  "homepage": "https://github.com/volkovasystems/loosen#readme",
+  "dependencies": {
+    "doubt": "0.0.4",
+    "u200b": "^0.2.1"
+  }
+}
