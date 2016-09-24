@@ -47,6 +47,7 @@
 
 	@include:
 		{
+			"harden": "harden",
 			"doubt": "doubt",
 			"U200b": "u200b"
 		}
@@ -54,8 +55,15 @@
 */
 
 if( typeof window == "undefined" ){
+	var harden = require( "harden" );
 	var doubt = require( "doubt" );
 	var U200b = require( "u200b" );
+}
+
+if( typeof window != "undefined" &&
+	!( "harden" in window ) )
+{
+	throw new Error( "harden is not defined" );
 }
 
 if( typeof window != "undefined" &&
@@ -70,6 +78,8 @@ if( typeof window != "undefined" &&
 	throw new Error( "U200b is not defined" );
 }
 
+harden( "LOOSENED", "loosened" );
+
 var loosen = function loosen( entity, path, cache ){
 	/*;
 		@meta-configuration:
@@ -83,6 +93,10 @@ var loosen = function loosen( entity, path, cache ){
 			}
 		@end-meta-configuration
 	*/
+
+	if( entity.LOOSENED === LOOSENED ){
+		return entity;
+	}
 
 	cache = cache || { };
 
@@ -115,6 +129,8 @@ var loosen = function loosen( entity, path, cache ){
 				loosen( element, key, cache );
 			} );
 	}
+
+	harden.bind( cache )( "LOOSENED", LOOSENED );
 
 	return cache;
 };

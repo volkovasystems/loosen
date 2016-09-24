@@ -1,6 +1,6 @@
 {
   "name": "loosen",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Transform deep object into shallow object.",
   "main": "loosen.js",
   "scripts": {
@@ -24,6 +24,7 @@
   "homepage": "https://github.com/volkovasystems/loosen#readme",
   "dependencies": {
     "doubt": "0.0.4",
+    "harden": "^0.3.5",
     "u200b": "^0.2.1"
   }
 }
