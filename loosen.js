@@ -94,6 +94,8 @@ var loosen = function loosen( entity, path, cache ){
 		@end-meta-configuration
 	*/
 
+	entity = entity || { };
+
 	if( entity.LOOSENED === LOOSENED ){
 		return entity;
 	}

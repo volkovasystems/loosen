@@ -1,6 +1,6 @@
 {
   "name": "loosen",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Transform deep object into shallow object.",
   "main": "loosen.js",
   "scripts": {
