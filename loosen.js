@@ -106,10 +106,10 @@ var loosen = function loosen( entity, path, cache ){
 
 	var element = null;
 	if( doubt( entity ).ARRAY ){
-		var key = "";
-		var entityLength = entity.length;
+		let key = "";
+		let entityLength = entity.length;
 
-		for( var index = 0; index < entityLength; index++ ){
+		for( let index = 0; index < entityLength; index++ ){
 			key = U200b( path, index ).join( "." ).replace( /^\./, "" );
 
 			element = entity[ index ];
@@ -117,6 +117,19 @@ var loosen = function loosen( entity, path, cache ){
 			cache[ key ] = element;
 
 			loosen( element, key, cache );
+
+			if( typeof element == "object" ){
+				for( let property in element ){
+					let key = U200b( path, property ).join( "..." ).replace( /^\.{3}/, "" );
+
+					let list = cache[ key ] = cache[ key ] || [ ];
+
+					let data = element[ property ];
+					list.push( data );
+
+					loosen( data, key, cache );
+				}
+			}
 		}
 
 	}else if( typeof entity == "object" ){
