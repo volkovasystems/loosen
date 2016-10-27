@@ -107,10 +107,13 @@ var loosen = function loosen( entity, path, cache ){
 	var element = null;
 	if( doubt( entity ).ARRAY ){
 		let key = "";
-		let entityLength = entity.length;
-
-		for( let index = 0; index < entityLength; index++ ){
-			key = U200b( path, index ).join( "." ).replace( /^\./, "" );
+		
+		for( let index = 0,
+				entityLength = entity.length;
+			index < entityLength;
+			index++ )
+		{
+			key = U200b( path, index ).join( "." ).replace( loosen.REFERENCE_PATTERN, "" );
 
 			element = entity[ index ];
 
@@ -120,7 +123,8 @@ var loosen = function loosen( entity, path, cache ){
 
 			if( typeof element == "object" ){
 				for( let property in element ){
-					let key = U200b( path, property ).join( "..." ).replace( /^\.{3}/, "" );
+					let key = U200b( path, property ).join( "..." )
+						.replace( loosen.ACCUMULATOR_PATTERN, "" );
 
 					let list = cache[ key ] = cache[ key ] || [ ];
 
@@ -137,7 +141,7 @@ var loosen = function loosen( entity, path, cache ){
 			.forEach( function onEachKey( key ){
 				element = entity[ key ];
 
-				key = U200b( path, key ).join( "." ).replace( /^\./, "" );
+				key = U200b( path, key ).join( "." ).replace( loosen.REFERENCE_PATTERN, "" );
 
 				cache[ key ] = element;
 
@@ -149,6 +153,10 @@ var loosen = function loosen( entity, path, cache ){
 
 	return cache;
 };
+
+harden.bind( loosen )( "REFERENCE_PATTERN", /^\./ );
+
+harden.bind( loosen )( "ACCUMULATOR_PATTERN", /^\./ );
 
 if( typeof module != "undefined" ){
 	module.exports = loosen;

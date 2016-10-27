@@ -1,6 +1,6 @@
 {
   "name": "loosen",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Transform deep object into shallow object.",
   "main": "loosen.js",
   "authors": [
@@ -22,8 +22,8 @@
     "tests"
   ],
   "dependencies": {
-    "doubt": "^0.0.4",
+    "doubt": "^0.0.6",
     "harden": "^0.3.5",
-    "u200b": "^0.2.3"
+    "u200b": "^0.3.0"
   }
 }
