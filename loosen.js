@@ -5,7 +5,7 @@
 		The MIT License (MIT)
 		@mit-license
 
-		Copyright (@c) 2016 Richeve Siodina Bebedor
+		Copyright (@c) 2017 Richeve Siodina Bebedor
 		@email: richeve.bebedor@gmail.com
 
 		Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,6 +34,9 @@
 			"file": "loosen.js",
 			"module": "loosen",
 			"author": "Richeve S. Bebedor",
+			"contributors": [
+				"John Lenon Maghanoy <johnlenonmaghanoy@gmail.com>"
+			],
 			"eMail": "richeve.bebedor@gmail.com",
 			"repository": "https://github.com/volkovasystems/loosen.git",
 			"test": "loosen-test.js",
@@ -47,40 +50,22 @@
 
 	@include:
 		{
-			"harden": "harden",
 			"doubt": "doubt",
+			"harden": "harden",
+			"protype": "protype",
 			"U200b": "u200b"
 		}
 	@end-include
 */
 
-if( typeof window == "undefined" ){
-	var harden = require( "harden" );
-	var doubt = require( "doubt" );
-	var U200b = require( "u200b" );
-}
-
-if( typeof window != "undefined" &&
-	!( "harden" in window ) )
-{
-	throw new Error( "harden is not defined" );
-}
-
-if( typeof window != "undefined" &&
-	!( "doubt" in window ) )
-{
-	throw new Error( "doubt is not defined" );
-}
-
-if( typeof window != "undefined" &&
-	!( "U200b" in window ) )
-{
-	throw new Error( "U200b is not defined" );
-}
+const doubt = require( "doubt" );
+const harden = require( "harden" );
+const protype = require( "protype" );
+const U200b = require( "u200b" );
 
 harden( "LOOSENED", "loosened" );
 
-var loosen = function loosen( entity, path, cache ){
+const loosen = function loosen( entity, path, cache ){
 	/*;
 		@meta-configuration:
 			{
@@ -104,10 +89,10 @@ var loosen = function loosen( entity, path, cache ){
 
 	path = path || "";
 
-	var element = null;
+	let element = null;
 	if( doubt( entity ).ARRAY ){
 		let key = "";
-		
+
 		for( let index = 0,
 				entityLength = entity.length;
 			index < entityLength;
@@ -121,7 +106,7 @@ var loosen = function loosen( entity, path, cache ){
 
 			loosen( element, key, cache );
 
-			if( typeof element == "object" ){
+			if( protype( element, OBJECT ) ){
 				for( let property in element ){
 					let key = U200b( path, property ).join( "..." )
 						.replace( loosen.ACCUMULATOR_PATTERN, "" );
@@ -136,7 +121,7 @@ var loosen = function loosen( entity, path, cache ){
 			}
 		}
 
-	}else if( typeof entity == "object" ){
+	}else if( protype( entity, OBJECT ) ){
 		Object.keys( entity )
 			.forEach( function onEachKey( key ){
 				element = entity[ key ];
@@ -158,6 +143,4 @@ harden.bind( loosen )( "REFERENCE_PATTERN", /^\./ );
 
 harden.bind( loosen )( "ACCUMULATOR_PATTERN", /^\./ );
 
-if( typeof module != "undefined" ){
-	module.exports = loosen;
-}
+module.exports = loosen;
