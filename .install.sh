@@ -3,6 +3,8 @@ babel-runtime \
 doubt \
 harden \
 protype \
+truly \
+truu \
 u200b \
 --save && \
 yarn add \
@@ -17,5 +19,7 @@ bower install \
 doubt \
 harden \
 protype \
+truly \
+truu \
 u200b \
 --save

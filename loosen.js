@@ -53,6 +53,7 @@
 			"doubt": "doubt",
 			"harden": "harden",
 			"protype": "protype",
+			"truly": "truly",
 			"U200b": "u200b"
 		}
 	@end-include
@@ -61,6 +62,8 @@
 const doubt = require( "doubt" );
 const harden = require( "harden" );
 const protype = require( "protype" );
+const truly = require( "truly" );
+const truu = require( "truu" );
 const U200b = require( "u200b" );
 
 const LOOSENED = "loosened";
@@ -80,6 +83,18 @@ const loosen = function loosen( entity, path, cache ){
 			}
 		@end-meta-configuration
 	*/
+
+	if( !protype( entity, OBJECT ) ){
+		throw new Error( "invalid entity" );
+	}
+
+	if( truly( path ) && !protype( path, STRING ) ){
+		throw new Error( "invalid path" );
+	}
+
+	if( truu( cache ) && !protype( cache, OBJECT ) ){
+		throw new Error( "invalid cache" );
+	}
 
 	entity = entity || { };
 
@@ -102,9 +117,9 @@ const loosen = function loosen( entity, path, cache ){
 
 			cache[ key ] = element;
 
-			loosen( element, key, cache );
-
 			if( protype( element, OBJECT ) ){
+				loosen( element, key, cache );
+
 				for( let property in element ){
 					let key = U200b( path, property ).join( "..." ).replace( ACCUMULATOR_PATTERN, "" );
 
@@ -113,7 +128,9 @@ const loosen = function loosen( entity, path, cache ){
 					let data = element[ property ];
 					list.push( data );
 
-					loosen( data, key, cache );
+					if( protype( data, OBJECT ) ){
+						loosen( data, key, cache );
+					}
 				}
 			}
 		}
@@ -127,7 +144,9 @@ const loosen = function loosen( entity, path, cache ){
 
 				cache[ key ] = element;
 
-				loosen( element, key, cache );
+				if( protype( element, OBJECT ) ){
+					loosen( element, key, cache );
+				}
 			} );
 	}
 

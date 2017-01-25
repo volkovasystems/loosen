@@ -1,6 +1,6 @@
 {
   "name": "loosen",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Transform deep object into shallow object.",
   "main": "loosen.js",
   "support": "loosen.support.js",
@@ -33,6 +33,8 @@
     "doubt": "^0.8.0",
     "harden": "^0.13.0",
     "protype": "^0.9.0",
+    "truly": "^0.7.0",
+    "truu": "^0.4.0",
     "u200b": "^0.8.0"
   },
   "devDependencies": {
