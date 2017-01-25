@@ -63,7 +63,9 @@ const harden = require( "harden" );
 const protype = require( "protype" );
 const U200b = require( "u200b" );
 
-harden( "LOOSENED", "loosened" );
+const LOOSENED = "loosened";
+const REFERENCE_PATTERN = /^\./;
+const ACCUMULATOR_PATTERN = /^\./;
 
 const loosen = function loosen( entity, path, cache ){
 	/*;
@@ -90,15 +92,11 @@ const loosen = function loosen( entity, path, cache ){
 	path = path || "";
 
 	let element = null;
-	if( doubt( entity ).ARRAY ){
+	if( doubt( entity, ARRAY ) ){
 		let key = "";
 
-		for( let index = 0,
-				entityLength = entity.length;
-			index < entityLength;
-			index++ )
-		{
-			key = U200b( path, index ).join( "." ).replace( loosen.REFERENCE_PATTERN, "" );
+		for( let index = 0, length = entity.length; index < length; index++ ){
+			key = U200b( path, index ).join( "." ).replace( REFERENCE_PATTERN, "" );
 
 			element = entity[ index ];
 
@@ -108,8 +106,7 @@ const loosen = function loosen( entity, path, cache ){
 
 			if( protype( element, OBJECT ) ){
 				for( let property in element ){
-					let key = U200b( path, property ).join( "..." )
-						.replace( loosen.ACCUMULATOR_PATTERN, "" );
+					let key = U200b( path, property ).join( "..." ).replace( ACCUMULATOR_PATTERN, "" );
 
 					let list = cache[ key ] = cache[ key ] || [ ];
 
@@ -126,7 +123,7 @@ const loosen = function loosen( entity, path, cache ){
 			.forEach( function onEachKey( key ){
 				element = entity[ key ];
 
-				key = U200b( path, key ).join( "." ).replace( loosen.REFERENCE_PATTERN, "" );
+				key = U200b( path, key ).join( "." ).replace( REFERENCE_PATTERN, "" );
 
 				cache[ key ] = element;
 
@@ -134,13 +131,9 @@ const loosen = function loosen( entity, path, cache ){
 			} );
 	}
 
-	harden.bind( cache )( "LOOSENED", LOOSENED );
+	harden( "LOOSENED", LOOSENED, cache );
 
 	return cache;
 };
-
-harden.bind( loosen )( "REFERENCE_PATTERN", /^\./ );
-
-harden.bind( loosen )( "ACCUMULATOR_PATTERN", /^\./ );
 
 module.exports = loosen;
