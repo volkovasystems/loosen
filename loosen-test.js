@@ -1,3 +1,5 @@
+"use strict";
+
 const loosen = require( "./loosen.js" );
 
 let item_array = [
