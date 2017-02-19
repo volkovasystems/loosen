@@ -1,105 +1,136 @@
 "use strict";
 
 /*;
-	@module-license:
-		The MIT License (MIT)
-		@mit-license
+              	@module-license:
+              		The MIT License (MIT)
+              		@mit-license
+              
+              		Copyright (@c) 2017 Richeve Siodina Bebedor
+              		@email: richeve.bebedor@gmail.com
+              
+              		Permission is hereby granted, free of charge, to any person obtaining a copy
+              		of this software and associated documentation files (the "Software"), to deal
+              		in the Software without restriction, including without limitation the rights
+              		to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+              		copies of the Software, and to permit persons to whom the Software is
+              		furnished to do so, subject to the following conditions:
+              
+              		The above copyright notice and this permission notice shall be included in all
+              		copies or substantial portions of the Software.
+              
+              		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+              		IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+              		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+              		AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+              		LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+              		OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+              		SOFTWARE.
+              	@end-module-license
+              
+              	@module-configuration:
+              		{
+              			"package": "loosen",
+              			"path": "loosen/loosen.js",
+              			"file": "loosen.js",
+              			"module": "loosen",
+              			"author": "Richeve S. Bebedor",
+              			"contributors": [
+              				"John Lenon Maghanoy <johnlenonmaghanoy@gmail.com>"
+              			],
+              			"eMail": "richeve.bebedor@gmail.com",
+              			"repository": "https://github.com/volkovasystems/loosen.git",
+              			"test": "loosen-test.js",
+              			"global": true
+              		}
+              	@end-module-configuration
+              
+              	@module-documentation:
+              		Transform deep object into shallow object.
+              	@end-module-documentation
+              
+              	@include:
+              		{
+              			"budge": "budge",
+              			"depher": "depher",
+              			"doubt": "doubt",
+              			"harden": "harden",
+              			"kein": "kein",
+              			"protype": "protype",
+              			"truly": "truly",
+              			"U200b": "u200b"
+              		}
+              	@end-include
+              */var _keys = require("babel-runtime/core-js/object/keys");var _keys2 = _interopRequireDefault(_keys);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
-		Copyright (@c) 2017 Richeve Siodina Bebedor
-		@email: richeve.bebedor@gmail.com
-
-		Permission is hereby granted, free of charge, to any person obtaining a copy
-		of this software and associated documentation files (the "Software"), to deal
-		in the Software without restriction, including without limitation the rights
-		to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-		copies of the Software, and to permit persons to whom the Software is
-		furnished to do so, subject to the following conditions:
-
-		The above copyright notice and this permission notice shall be included in all
-		copies or substantial portions of the Software.
-
-		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-		IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-		AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-		LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-		OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-		SOFTWARE.
-	@end-module-license
-
-	@module-configuration:
-		{
-			"package": "loosen",
-			"path": "loosen/loosen.js",
-			"file": "loosen.js",
-			"module": "loosen",
-			"author": "Richeve S. Bebedor",
-			"contributors": [
-				"John Lenon Maghanoy <johnlenonmaghanoy@gmail.com>"
-			],
-			"eMail": "richeve.bebedor@gmail.com",
-			"repository": "https://github.com/volkovasystems/loosen.git",
-			"test": "loosen-test.js",
-			"global": true
-		}
-	@end-module-configuration
-
-	@module-documentation:
-		Transform deep object into shallow object.
-	@end-module-documentation
-
-	@include:
-		{
-			"doubt": "doubt",
-			"harden": "harden",
-			"protype": "protype",
-			"truly": "truly",
-			"U200b": "u200b"
-		}
-	@end-include
-*/
-
-var _keys = require("babel-runtime/core-js/object/keys");
-
-var _keys2 = _interopRequireDefault(_keys);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+var budge = require("budge");
+var depher = require("depher");
 var doubt = require("doubt");
 var harden = require("harden");
+var kein = require("kein");
+var plough = require("plough");
 var protype = require("protype");
 var truly = require("truly");
-var truu = require("truu");
 var U200b = require("u200b");
 
 var LOOSENED = "loosened";
 var REFERENCE_PATTERN = /^\./;
-var ACCUMULATOR_PATTERN = /^\./;
+var ACCUMULATOR_PATTERN = /\.{3}/;
 
-var loosen = function loosen(entity, path, cache) {
+/*;
+                                   	@internal-method-documentation:
+                                   		We separate the push function because this will manage if the key
+                                   			is an accumulator path and should accumulate values.
+                                   	@end-internal-method-documentation
+                                   */
+var push = function push(cache, key, element) {
 	/*;
- 	@meta-configuration:
- 		{
- 			"entity:required": [
- 				Array,
- 				"object"
- 			],
- 			"path": "string",
- 			"cache": "object"
- 		}
- 	@end-meta-configuration
- */
+                                               	@meta-configuration:
+                                               		{
+                                               			"cache:required": "object",
+                                               			"key:required": "string",
+                                               			"element:required": "*"
+                                               		}
+                                               	@end-meta-configuration
+                                               */
+
+	if (!protype(cache, OBJECT)) {
+		throw new Error("invalid cache");
+	}
+
+	if (!protype(key, STRING)) {
+		throw new Error("invalid key");
+	}
+
+	if (ACCUMULATOR_PATTERN.test(key) &&
+	kein(cache, key) &&
+	!doubt(element, ARRAY))
+	{
+		cache[key] = plough(cache[key], element);
+
+	} else {
+		cache[key] = element;
+	}
+
+	return cache;
+};
+
+var loosen = function loosen(entity, path, cache, compressed) {
+	/*;
+                                                               	@meta-configuration:
+                                                               		{
+                                                               			"entity:required": [
+                                                               				Array,
+                                                               				"object"
+                                                               			],
+                                                               			"path": "string",
+                                                               			"cache": "object",
+                                                               			"compressed": "boolean"
+                                                               		}
+                                                               	@end-meta-configuration
+                                                               */
 
 	if (!protype(entity, OBJECT)) {
 		throw new Error("invalid entity");
-	}
-
-	if (truly(path) && !protype(path, STRING)) {
-		throw new Error("invalid path");
-	}
-
-	if (truu(cache) && !protype(cache, OBJECT)) {
-		throw new Error("invalid cache");
 	}
 
 	entity = entity || {};
@@ -108,9 +139,13 @@ var loosen = function loosen(entity, path, cache) {
 		return entity;
 	}
 
-	cache = cache || {};
+	var parameter = budge(arguments);
 
-	path = path || "";
+	path = depher(parameter, STRING, "");
+
+	cache = depher(parameter, OBJECT, {});
+
+	compressed = depher(parameter, BOOLEAN, false);
 
 	var element = null;
 	if (doubt(entity, ARRAY)) {
@@ -121,35 +156,56 @@ var loosen = function loosen(entity, path, cache) {
 
 			element = entity[index];
 
-			cache[key] = element;
-
 			if (protype(element, OBJECT)) {
-				loosen(element, key, cache);
+				if (!compressed) {
+					push(cache, key, element);
+				}
 
-				for (var property in element) {
-					var _key = U200b(path, property).join("...").replace(ACCUMULATOR_PATTERN, "");
+				loosen(element, key, cache, compressed);
 
-					var list = cache[_key] = cache[_key] || [];
+				/*;
+                                             	@note:
+                                             		This is the accumulator logic.
+                                             			This will try to accumulate values of the same path.
+                                             	@end-note
+                                             */
 
-					var data = element[property];
-					list.push(data);
+				if (!compressed) {
+					for (var property in element) {
+						var _key = U200b(path, property).join("...").replace(REFERENCE_PATTERN, "");
 
-					if (protype(data, OBJECT)) {
-						loosen(data, _key, cache);
+						var data = element[property];
+
+						var list = cache[_key] = cache[_key] || [];
+						list.push(data);
+
+						if (protype(data, OBJECT)) {
+							loosen(data, _key, cache, compressed);
+						}
 					}
 				}
+
+			} else {
+				push(cache, key, element);
 			}
 		}
+
 	} else if (protype(entity, OBJECT)) {
-		(0, _keys2.default)(entity).forEach(function onEachKey(key) {
+		(0, _keys2.default)(entity).
+		forEach(function onEachKey(key) {
 			element = entity[key];
 
 			key = U200b(path, key).join(".").replace(REFERENCE_PATTERN, "");
 
-			cache[key] = element;
-
 			if (protype(element, OBJECT)) {
-				loosen(element, key, cache);
+				if (!compressed) {
+					push(cache, key, element);
+				}
+
+				loosen(element, key, cache, compressed);
+
+			} else {
+				push(cache, key, element);
 			}
 		});
 	}
@@ -160,4 +216,5 @@ var loosen = function loosen(entity, path, cache) {
 };
 
 module.exports = loosen;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImxvb3Nlbi5qcyJdLCJuYW1lcyI6WyJkb3VidCIsInJlcXVpcmUiLCJoYXJkZW4iLCJwcm90eXBlIiwidHJ1bHkiLCJ0cnV1IiwiVTIwMGIiLCJMT09TRU5FRCIsIlJFRkVSRU5DRV9QQVRURVJOIiwiQUNDVU1VTEFUT1JfUEFUVEVSTiIsImxvb3NlbiIsImVudGl0eSIsInBhdGgiLCJjYWNoZSIsIk9CSkVDVCIsIkVycm9yIiwiU1RSSU5HIiwiZWxlbWVudCIsIkFSUkFZIiwia2V5IiwiaW5kZXgiLCJsZW5ndGgiLCJqb2luIiwicmVwbGFjZSIsInByb3BlcnR5IiwibGlzdCIsImRhdGEiLCJwdXNoIiwiZm9yRWFjaCIsIm9uRWFjaEtleSIsIm1vZHVsZSIsImV4cG9ydHMiXSwibWFwcGluZ3MiOiJBQUFBOztBQUVBOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQTJEQSxJQUFNQSxRQUFRQyxRQUFTLE9BQVQsQ0FBZDtBQUNBLElBQU1DLFNBQVNELFFBQVMsUUFBVCxDQUFmO0FBQ0EsSUFBTUUsVUFBVUYsUUFBUyxTQUFULENBQWhCO0FBQ0EsSUFBTUcsUUFBUUgsUUFBUyxPQUFULENBQWQ7QUFDQSxJQUFNSSxPQUFPSixRQUFTLE1BQVQsQ0FBYjtBQUNBLElBQU1LLFFBQVFMLFFBQVMsT0FBVCxDQUFkOztBQUVBLElBQU1NLFdBQVcsVUFBakI7QUFDQSxJQUFNQyxvQkFBb0IsS0FBMUI7QUFDQSxJQUFNQyxzQkFBc0IsS0FBNUI7O0FBRUEsSUFBTUMsU0FBUyxTQUFTQSxNQUFULENBQWlCQyxNQUFqQixFQUF5QkMsSUFBekIsRUFBK0JDLEtBQS9CLEVBQXNDO0FBQ3BEOzs7Ozs7Ozs7Ozs7O0FBYUEsS0FBSSxDQUFDVixRQUFTUSxNQUFULEVBQWlCRyxNQUFqQixDQUFMLEVBQWdDO0FBQy9CLFFBQU0sSUFBSUMsS0FBSixDQUFXLGdCQUFYLENBQU47QUFDQTs7QUFFRCxLQUFJWCxNQUFPUSxJQUFQLEtBQWlCLENBQUNULFFBQVNTLElBQVQsRUFBZUksTUFBZixDQUF0QixFQUErQztBQUM5QyxRQUFNLElBQUlELEtBQUosQ0FBVyxjQUFYLENBQU47QUFDQTs7QUFFRCxLQUFJVixLQUFNUSxLQUFOLEtBQWlCLENBQUNWLFFBQVNVLEtBQVQsRUFBZ0JDLE1BQWhCLENBQXRCLEVBQWdEO0FBQy9DLFFBQU0sSUFBSUMsS0FBSixDQUFXLGVBQVgsQ0FBTjtBQUNBOztBQUVESixVQUFTQSxVQUFVLEVBQW5COztBQUVBLEtBQUlBLE9BQU9KLFFBQVAsS0FBb0JBLFFBQXhCLEVBQWtDO0FBQ2pDLFNBQU9JLE1BQVA7QUFDQTs7QUFFREUsU0FBUUEsU0FBUyxFQUFqQjs7QUFFQUQsUUFBT0EsUUFBUSxFQUFmOztBQUVBLEtBQUlLLFVBQVUsSUFBZDtBQUNBLEtBQUlqQixNQUFPVyxNQUFQLEVBQWVPLEtBQWYsQ0FBSixFQUE0QjtBQUMzQixNQUFJQyxNQUFNLEVBQVY7O0FBRUEsT0FBSyxJQUFJQyxRQUFRLENBQVosRUFBZUMsU0FBU1YsT0FBT1UsTUFBcEMsRUFBNENELFFBQVFDLE1BQXBELEVBQTRERCxPQUE1RCxFQUFxRTtBQUNwRUQsU0FBTWIsTUFBT00sSUFBUCxFQUFhUSxLQUFiLEVBQXFCRSxJQUFyQixDQUEyQixHQUEzQixFQUFpQ0MsT0FBakMsQ0FBMENmLGlCQUExQyxFQUE2RCxFQUE3RCxDQUFOOztBQUVBUyxhQUFVTixPQUFRUyxLQUFSLENBQVY7O0FBRUFQLFNBQU9NLEdBQVAsSUFBZUYsT0FBZjs7QUFFQSxPQUFJZCxRQUFTYyxPQUFULEVBQWtCSCxNQUFsQixDQUFKLEVBQWdDO0FBQy9CSixXQUFRTyxPQUFSLEVBQWlCRSxHQUFqQixFQUFzQk4sS0FBdEI7O0FBRUEsU0FBSyxJQUFJVyxRQUFULElBQXFCUCxPQUFyQixFQUE4QjtBQUM3QixTQUFJRSxPQUFNYixNQUFPTSxJQUFQLEVBQWFZLFFBQWIsRUFBd0JGLElBQXhCLENBQThCLEtBQTlCLEVBQXNDQyxPQUF0QyxDQUErQ2QsbUJBQS9DLEVBQW9FLEVBQXBFLENBQVY7O0FBRUEsU0FBSWdCLE9BQU9aLE1BQU9NLElBQVAsSUFBZU4sTUFBT00sSUFBUCxLQUFnQixFQUExQzs7QUFFQSxTQUFJTyxPQUFPVCxRQUFTTyxRQUFULENBQVg7QUFDQUMsVUFBS0UsSUFBTCxDQUFXRCxJQUFYOztBQUVBLFNBQUl2QixRQUFTdUIsSUFBVCxFQUFlWixNQUFmLENBQUosRUFBNkI7QUFDNUJKLGFBQVFnQixJQUFSLEVBQWNQLElBQWQsRUFBbUJOLEtBQW5CO0FBQ0E7QUFDRDtBQUNEO0FBQ0Q7QUFFRCxFQTVCRCxNQTRCTSxJQUFJVixRQUFTUSxNQUFULEVBQWlCRyxNQUFqQixDQUFKLEVBQStCO0FBQ3BDLHNCQUFhSCxNQUFiLEVBQ0VpQixPQURGLENBQ1csU0FBU0MsU0FBVCxDQUFvQlYsR0FBcEIsRUFBeUI7QUFDbENGLGFBQVVOLE9BQVFRLEdBQVIsQ0FBVjs7QUFFQUEsU0FBTWIsTUFBT00sSUFBUCxFQUFhTyxHQUFiLEVBQW1CRyxJQUFuQixDQUF5QixHQUF6QixFQUErQkMsT0FBL0IsQ0FBd0NmLGlCQUF4QyxFQUEyRCxFQUEzRCxDQUFOOztBQUVBSyxTQUFPTSxHQUFQLElBQWVGLE9BQWY7O0FBRUEsT0FBSWQsUUFBU2MsT0FBVCxFQUFrQkgsTUFBbEIsQ0FBSixFQUFnQztBQUMvQkosV0FBUU8sT0FBUixFQUFpQkUsR0FBakIsRUFBc0JOLEtBQXRCO0FBQ0E7QUFDRCxHQVhGO0FBWUE7O0FBRURYLFFBQVEsVUFBUixFQUFvQkssUUFBcEIsRUFBOEJNLEtBQTlCOztBQUVBLFFBQU9BLEtBQVA7QUFDQSxDQW5GRDs7QUFxRkFpQixPQUFPQyxPQUFQLEdBQWlCckIsTUFBakIiLCJmaWxlIjoibG9vc2VuLmpzIiwic291cmNlc0NvbnRlbnQiOlsiXCJ1c2Ugc3RyaWN0XCI7XG5cbi8qO1xuXHRAbW9kdWxlLWxpY2Vuc2U6XG5cdFx0VGhlIE1JVCBMaWNlbnNlIChNSVQpXG5cdFx0QG1pdC1saWNlbnNlXG5cblx0XHRDb3B5cmlnaHQgKEBjKSAyMDE3IFJpY2hldmUgU2lvZGluYSBCZWJlZG9yXG5cdFx0QGVtYWlsOiByaWNoZXZlLmJlYmVkb3JAZ21haWwuY29tXG5cblx0XHRQZXJtaXNzaW9uIGlzIGhlcmVieSBncmFudGVkLCBmcmVlIG9mIGNoYXJnZSwgdG8gYW55IHBlcnNvbiBvYnRhaW5pbmcgYSBjb3B5XG5cdFx0b2YgdGhpcyBzb2Z0d2FyZSBhbmQgYXNzb2NpYXRlZCBkb2N1bWVudGF0aW9uIGZpbGVzICh0aGUgXCJTb2Z0d2FyZVwiKSwgdG8gZGVhbFxuXHRcdGluIHRoZSBTb2Z0d2FyZSB3aXRob3V0IHJlc3RyaWN0aW9uLCBpbmNsdWRpbmcgd2l0aG91dCBsaW1pdGF0aW9uIHRoZSByaWdodHNcblx0XHR0byB1c2UsIGNvcHksIG1vZGlmeSwgbWVyZ2UsIHB1Ymxpc2gsIGRpc3RyaWJ1dGUsIHN1YmxpY2Vuc2UsIGFuZC9vciBzZWxsXG5cdFx0Y29waWVzIG9mIHRoZSBTb2Z0d2FyZSwgYW5kIHRvIHBlcm1pdCBwZXJzb25zIHRvIHdob20gdGhlIFNvZnR3YXJlIGlzXG5cdFx0ZnVybmlzaGVkIHRvIGRvIHNvLCBzdWJqZWN0IHRvIHRoZSBmb2xsb3dpbmcgY29uZGl0aW9uczpcblxuXHRcdFRoZSBhYm92ZSBjb3B5cmlnaHQgbm90aWNlIGFuZCB0aGlzIHBlcm1pc3Npb24gbm90aWNlIHNoYWxsIGJlIGluY2x1ZGVkIGluIGFsbFxuXHRcdGNvcGllcyBvciBzdWJzdGFudGlhbCBwb3J0aW9ucyBvZiB0aGUgU29mdHdhcmUuXG5cblx0XHRUSEUgU09GVFdBUkUgSVMgUFJPVklERUQgXCJBUyBJU1wiLCBXSVRIT1VUIFdBUlJBTlRZIE9GIEFOWSBLSU5ELCBFWFBSRVNTIE9SXG5cdFx0SU1QTElFRCwgSU5DTFVESU5HIEJVVCBOT1QgTElNSVRFRCBUTyBUSEUgV0FSUkFOVElFUyBPRiBNRVJDSEFOVEFCSUxJVFksXG5cdFx0RklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UgQU5EIE5PTklORlJJTkdFTUVOVC4gSU4gTk8gRVZFTlQgU0hBTEwgVEhFXG5cdFx0QVVUSE9SUyBPUiBDT1BZUklHSFQgSE9MREVSUyBCRSBMSUFCTEUgRk9SIEFOWSBDTEFJTSwgREFNQUdFUyBPUiBPVEhFUlxuXHRcdExJQUJJTElUWSwgV0hFVEhFUiBJTiBBTiBBQ1RJT04gT0YgQ09OVFJBQ1QsIFRPUlQgT1IgT1RIRVJXSVNFLCBBUklTSU5HIEZST00sXG5cdFx0T1VUIE9GIE9SIElOIENPTk5FQ1RJT04gV0lUSCBUSEUgU09GVFdBUkUgT1IgVEhFIFVTRSBPUiBPVEhFUiBERUFMSU5HUyBJTiBUSEVcblx0XHRTT0ZUV0FSRS5cblx0QGVuZC1tb2R1bGUtbGljZW5zZVxuXG5cdEBtb2R1bGUtY29uZmlndXJhdGlvbjpcblx0XHR7XG5cdFx0XHRcInBhY2thZ2VcIjogXCJsb29zZW5cIixcblx0XHRcdFwicGF0aFwiOiBcImxvb3Nlbi9sb29zZW4uanNcIixcblx0XHRcdFwiZmlsZVwiOiBcImxvb3Nlbi5qc1wiLFxuXHRcdFx0XCJtb2R1bGVcIjogXCJsb29zZW5cIixcblx0XHRcdFwiYXV0aG9yXCI6IFwiUmljaGV2ZSBTLiBCZWJlZG9yXCIsXG5cdFx0XHRcImNvbnRyaWJ1dG9yc1wiOiBbXG5cdFx0XHRcdFwiSm9obiBMZW5vbiBNYWdoYW5veSA8am9obmxlbm9ubWFnaGFub3lAZ21haWwuY29tPlwiXG5cdFx0XHRdLFxuXHRcdFx0XCJlTWFpbFwiOiBcInJpY2hldmUuYmViZWRvckBnbWFpbC5jb21cIixcblx0XHRcdFwicmVwb3NpdG9yeVwiOiBcImh0dHBzOi8vZ2l0aHViLmNvbS92b2xrb3Zhc3lzdGVtcy9sb29zZW4uZ2l0XCIsXG5cdFx0XHRcInRlc3RcIjogXCJsb29zZW4tdGVzdC5qc1wiLFxuXHRcdFx0XCJnbG9iYWxcIjogdHJ1ZVxuXHRcdH1cblx0QGVuZC1tb2R1bGUtY29uZmlndXJhdGlvblxuXG5cdEBtb2R1bGUtZG9jdW1lbnRhdGlvbjpcblx0XHRUcmFuc2Zvcm0gZGVlcCBvYmplY3QgaW50byBzaGFsbG93IG9iamVjdC5cblx0QGVuZC1tb2R1bGUtZG9jdW1lbnRhdGlvblxuXG5cdEBpbmNsdWRlOlxuXHRcdHtcblx0XHRcdFwiZG91YnRcIjogXCJkb3VidFwiLFxuXHRcdFx0XCJoYXJkZW5cIjogXCJoYXJkZW5cIixcblx0XHRcdFwicHJvdHlwZVwiOiBcInByb3R5cGVcIixcblx0XHRcdFwidHJ1bHlcIjogXCJ0cnVseVwiLFxuXHRcdFx0XCJVMjAwYlwiOiBcInUyMDBiXCJcblx0XHR9XG5cdEBlbmQtaW5jbHVkZVxuKi9cblxuY29uc3QgZG91YnQgPSByZXF1aXJlKCBcImRvdWJ0XCIgKTtcbmNvbnN0IGhhcmRlbiA9IHJlcXVpcmUoIFwiaGFyZGVuXCIgKTtcbmNvbnN0IHByb3R5cGUgPSByZXF1aXJlKCBcInByb3R5cGVcIiApO1xuY29uc3QgdHJ1bHkgPSByZXF1aXJlKCBcInRydWx5XCIgKTtcbmNvbnN0IHRydXUgPSByZXF1aXJlKCBcInRydXVcIiApO1xuY29uc3QgVTIwMGIgPSByZXF1aXJlKCBcInUyMDBiXCIgKTtcblxuY29uc3QgTE9PU0VORUQgPSBcImxvb3NlbmVkXCI7XG5jb25zdCBSRUZFUkVOQ0VfUEFUVEVSTiA9IC9eXFwuLztcbmNvbnN0IEFDQ1VNVUxBVE9SX1BBVFRFUk4gPSAvXlxcLi87XG5cbmNvbnN0IGxvb3NlbiA9IGZ1bmN0aW9uIGxvb3NlbiggZW50aXR5LCBwYXRoLCBjYWNoZSApe1xuXHQvKjtcblx0XHRAbWV0YS1jb25maWd1cmF0aW9uOlxuXHRcdFx0e1xuXHRcdFx0XHRcImVudGl0eTpyZXF1aXJlZFwiOiBbXG5cdFx0XHRcdFx0QXJyYXksXG5cdFx0XHRcdFx0XCJvYmplY3RcIlxuXHRcdFx0XHRdLFxuXHRcdFx0XHRcInBhdGhcIjogXCJzdHJpbmdcIixcblx0XHRcdFx0XCJjYWNoZVwiOiBcIm9iamVjdFwiXG5cdFx0XHR9XG5cdFx0QGVuZC1tZXRhLWNvbmZpZ3VyYXRpb25cblx0Ki9cblxuXHRpZiggIXByb3R5cGUoIGVudGl0eSwgT0JKRUNUICkgKXtcblx0XHR0aHJvdyBuZXcgRXJyb3IoIFwiaW52YWxpZCBlbnRpdHlcIiApO1xuXHR9XG5cblx0aWYoIHRydWx5KCBwYXRoICkgJiYgIXByb3R5cGUoIHBhdGgsIFNUUklORyApICl7XG5cdFx0dGhyb3cgbmV3IEVycm9yKCBcImludmFsaWQgcGF0aFwiICk7XG5cdH1cblxuXHRpZiggdHJ1dSggY2FjaGUgKSAmJiAhcHJvdHlwZSggY2FjaGUsIE9CSkVDVCApICl7XG5cdFx0dGhyb3cgbmV3IEVycm9yKCBcImludmFsaWQgY2FjaGVcIiApO1xuXHR9XG5cblx0ZW50aXR5ID0gZW50aXR5IHx8IHsgfTtcblxuXHRpZiggZW50aXR5LkxPT1NFTkVEID09PSBMT09TRU5FRCApe1xuXHRcdHJldHVybiBlbnRpdHk7XG5cdH1cblxuXHRjYWNoZSA9IGNhY2hlIHx8IHsgfTtcblxuXHRwYXRoID0gcGF0aCB8fCBcIlwiO1xuXG5cdGxldCBlbGVtZW50ID0gbnVsbDtcblx0aWYoIGRvdWJ0KCBlbnRpdHksIEFSUkFZICkgKXtcblx0XHRsZXQga2V5ID0gXCJcIjtcblxuXHRcdGZvciggbGV0IGluZGV4ID0gMCwgbGVuZ3RoID0gZW50aXR5Lmxlbmd0aDsgaW5kZXggPCBsZW5ndGg7IGluZGV4KysgKXtcblx0XHRcdGtleSA9IFUyMDBiKCBwYXRoLCBpbmRleCApLmpvaW4oIFwiLlwiICkucmVwbGFjZSggUkVGRVJFTkNFX1BBVFRFUk4sIFwiXCIgKTtcblxuXHRcdFx0ZWxlbWVudCA9IGVudGl0eVsgaW5kZXggXTtcblxuXHRcdFx0Y2FjaGVbIGtleSBdID0gZWxlbWVudDtcblxuXHRcdFx0aWYoIHByb3R5cGUoIGVsZW1lbnQsIE9CSkVDVCApICl7XG5cdFx0XHRcdGxvb3NlbiggZWxlbWVudCwga2V5LCBjYWNoZSApO1xuXG5cdFx0XHRcdGZvciggbGV0IHByb3BlcnR5IGluIGVsZW1lbnQgKXtcblx0XHRcdFx0XHRsZXQga2V5ID0gVTIwMGIoIHBhdGgsIHByb3BlcnR5ICkuam9pbiggXCIuLi5cIiApLnJlcGxhY2UoIEFDQ1VNVUxBVE9SX1BBVFRFUk4sIFwiXCIgKTtcblxuXHRcdFx0XHRcdGxldCBsaXN0ID0gY2FjaGVbIGtleSBdID0gY2FjaGVbIGtleSBdIHx8IFsgXTtcblxuXHRcdFx0XHRcdGxldCBkYXRhID0gZWxlbWVudFsgcHJvcGVydHkgXTtcblx0XHRcdFx0XHRsaXN0LnB1c2goIGRhdGEgKTtcblxuXHRcdFx0XHRcdGlmKCBwcm90eXBlKCBkYXRhLCBPQkpFQ1QgKSApe1xuXHRcdFx0XHRcdFx0bG9vc2VuKCBkYXRhLCBrZXksIGNhY2hlICk7XG5cdFx0XHRcdFx0fVxuXHRcdFx0XHR9XG5cdFx0XHR9XG5cdFx0fVxuXG5cdH1lbHNlIGlmKCBwcm90eXBlKCBlbnRpdHksIE9CSkVDVCApICl7XG5cdFx0T2JqZWN0LmtleXMoIGVudGl0eSApXG5cdFx0XHQuZm9yRWFjaCggZnVuY3Rpb24gb25FYWNoS2V5KCBrZXkgKXtcblx0XHRcdFx0ZWxlbWVudCA9IGVudGl0eVsga2V5IF07XG5cblx0XHRcdFx0a2V5ID0gVTIwMGIoIHBhdGgsIGtleSApLmpvaW4oIFwiLlwiICkucmVwbGFjZSggUkVGRVJFTkNFX1BBVFRFUk4sIFwiXCIgKTtcblxuXHRcdFx0XHRjYWNoZVsga2V5IF0gPSBlbGVtZW50O1xuXG5cdFx0XHRcdGlmKCBwcm90eXBlKCBlbGVtZW50LCBPQkpFQ1QgKSApe1xuXHRcdFx0XHRcdGxvb3NlbiggZWxlbWVudCwga2V5LCBjYWNoZSApO1xuXHRcdFx0XHR9XG5cdFx0XHR9ICk7XG5cdH1cblxuXHRoYXJkZW4oIFwiTE9PU0VORURcIiwgTE9PU0VORUQsIGNhY2hlICk7XG5cblx0cmV0dXJuIGNhY2hlO1xufTtcblxubW9kdWxlLmV4cG9ydHMgPSBsb29zZW47XG4iXX0=
+
+//# sourceMappingURL=loosen.support.js.map

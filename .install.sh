@@ -1,10 +1,13 @@
 yarn add \
 babel-runtime \
+budge \
+depher \
 doubt \
 harden \
+kein \
+plough \
 protype \
 truly \
-truu \
 u200b \
 --save && \
 yarn add \
@@ -16,10 +19,14 @@ source-map-loader \
 webpack \
 --dev && \
 bower install \
+budge \
+depher \
 doubt \
 harden \
+kein \
+plough \
 protype \
 truly \
-truu \
 u200b \
---save
+--save \
+--force-latest

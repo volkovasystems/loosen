@@ -2,24 +2,32 @@
 
 const loosen = require( "./loosen.js" );
 
-let item_array = [
-	"ballpen-item",
-	"Ballpen Item"
-];
-
-let merchant_array = [
-	"biyaheroes-team",
-	"pure-gold",
-	{
-		"logo": {
-			"reference": "ref1",
-			"path": "path1"
+let test = {
+	"hello": {
+		"world": {
+			"yeah": 1,
+			"ugh": false,
+			"hi": [
+				{
+					"weeeh": {
+						"yehey": 123
+					}
+				},
+				{
+					"weeeh": {
+						"yehey": 1234
+					}
+				},
+				"hello world",
+				123,
+				{
+					"weeeeeeh": 12345
+				}
+			]
 		}
 	}
-];
+};
 
-let segregate1 = loosen( item_array );
-let segregate2 = loosen( merchant_array );
+console.log( require( "util" ).inspect( loosen( test ), { "showHidden": true } ) );
 
-console.log( "segregate array", segregate1 );
-console.log( "segregate object", segregate2 );
+console.log( require( "util" ).inspect( loosen( test, true ), { "showHidden": true } ) );

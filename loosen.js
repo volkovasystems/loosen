@@ -50,8 +50,11 @@
 
 	@include:
 		{
+			"budge": "budge",
+			"depher": "depher",
 			"doubt": "doubt",
 			"harden": "harden",
+			"kein": "kein",
 			"protype": "protype",
 			"truly": "truly",
 			"U200b": "u200b"
@@ -59,18 +62,59 @@
 	@end-include
 */
 
+const budge = require( "budge" );
+const depher = require( "depher" );
 const doubt = require( "doubt" );
 const harden = require( "harden" );
+const kein = require( "kein" );
+const plough = require( "plough" );
 const protype = require( "protype" );
 const truly = require( "truly" );
-const truu = require( "truu" );
 const U200b = require( "u200b" );
 
 const LOOSENED = "loosened";
 const REFERENCE_PATTERN = /^\./;
-const ACCUMULATOR_PATTERN = /^\./;
+const ACCUMULATOR_PATTERN = /\.{3}/;
 
-const loosen = function loosen( entity, path, cache ){
+/*;
+	@internal-method-documentation:
+		We separate the push function because this will manage if the key
+			is an accumulator path and should accumulate values.
+	@end-internal-method-documentation
+*/
+const push = function push( cache, key, element ){
+	/*;
+		@meta-configuration:
+			{
+				"cache:required": "object",
+				"key:required": "string",
+				"element:required": "*"
+			}
+		@end-meta-configuration
+	*/
+
+	if( !protype( cache, OBJECT ) ){
+		throw new Error( "invalid cache" );
+	}
+
+	if( !protype( key, STRING ) ){
+		throw new Error( "invalid key" );
+	}
+
+	if( ACCUMULATOR_PATTERN.test( key ) &&
+		kein( cache, key ) &&
+		!doubt( element, ARRAY ) )
+	{
+		cache[ key ] = plough( cache[ key ], element );
+
+	}else{
+		cache[ key ] = element;
+	}
+
+	return cache;
+};
+
+const loosen = function loosen( entity, path, cache, compressed ){
 	/*;
 		@meta-configuration:
 			{
@@ -79,7 +123,8 @@ const loosen = function loosen( entity, path, cache ){
 					"object"
 				],
 				"path": "string",
-				"cache": "object"
+				"cache": "object",
+				"compressed": "boolean"
 			}
 		@end-meta-configuration
 	*/
@@ -88,23 +133,19 @@ const loosen = function loosen( entity, path, cache ){
 		throw new Error( "invalid entity" );
 	}
 
-	if( truly( path ) && !protype( path, STRING ) ){
-		throw new Error( "invalid path" );
-	}
-
-	if( truu( cache ) && !protype( cache, OBJECT ) ){
-		throw new Error( "invalid cache" );
-	}
-
 	entity = entity || { };
 
 	if( entity.LOOSENED === LOOSENED ){
 		return entity;
 	}
 
-	cache = cache || { };
+	let parameter = budge( arguments );
 
-	path = path || "";
+	path = depher( parameter, STRING, "" );
+
+	cache = depher( parameter, OBJECT, { } );
+
+	compressed = depher( parameter, BOOLEAN, false );
 
 	let element = null;
 	if( doubt( entity, ARRAY ) ){
@@ -115,23 +156,37 @@ const loosen = function loosen( entity, path, cache ){
 
 			element = entity[ index ];
 
-			cache[ key ] = element;
-
 			if( protype( element, OBJECT ) ){
-				loosen( element, key, cache );
+				if( !compressed ){
+					push( cache, key, element );
+				}
 
-				for( let property in element ){
-					let key = U200b( path, property ).join( "..." ).replace( ACCUMULATOR_PATTERN, "" );
+				loosen( element, key, cache, compressed );
 
-					let list = cache[ key ] = cache[ key ] || [ ];
+				/*;
+					@note:
+						This is the accumulator logic.
 
-					let data = element[ property ];
-					list.push( data );
+						This will try to accumulate values of the same path.
+					@end-note
+				*/
+				if( !compressed ){
+					for( let property in element ){
+						let key = U200b( path, property ).join( "..." ).replace( REFERENCE_PATTERN, "" );
 
-					if( protype( data, OBJECT ) ){
-						loosen( data, key, cache );
+						let data = element[ property ];
+
+						let list = cache[ key ] = cache[ key ] || [ ];
+						list.push( data );
+
+						if( protype( data, OBJECT ) ){
+							loosen( data, key, cache, compressed );
+						}
 					}
 				}
+
+			}else{
+				push( cache, key, element );
 			}
 		}
 
@@ -142,10 +197,15 @@ const loosen = function loosen( entity, path, cache ){
 
 				key = U200b( path, key ).join( "." ).replace( REFERENCE_PATTERN, "" );
 
-				cache[ key ] = element;
-
 				if( protype( element, OBJECT ) ){
-					loosen( element, key, cache );
+					if( !compressed ){
+						push( cache, key, element );
+					}
+
+					loosen( element, key, cache, compressed );
+
+				}else{
+					push( cache, key, element );
 				}
 			} );
 	}
