@@ -4,11 +4,15 @@ budge \
 depher \
 doubt \
 harden \
+karv \
 kein \
+kount \
+petrifi \
 plough \
 protype \
 truly \
 u200b \
+wichis \
 --save && \
 yarn add \
 babel-cli \
@@ -23,10 +27,14 @@ budge \
 depher \
 doubt \
 harden \
+karv \
 kein \
+kount \
+petrifi \
 plough \
 protype \
 truly \
 u200b \
+wichis \
 --save \
 --force-latest

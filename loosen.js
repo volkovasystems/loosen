@@ -54,10 +54,15 @@
 			"depher": "depher",
 			"doubt": "doubt",
 			"harden": "harden",
+			"karv": "karv",
 			"kein": "kein",
+			"kount": "kount",
+			"petrifi": "petrifi",
+			"plough": "plough",
 			"protype": "protype",
 			"truly": "truly",
-			"U200b": "u200b"
+			"U200b": "u200b",
+			"wichis": "wichis"
 		}
 	@end-include
 */
@@ -66,13 +71,18 @@ const budge = require( "budge" );
 const depher = require( "depher" );
 const doubt = require( "doubt" );
 const harden = require( "harden" );
+const karv = require( "karv" );
 const kein = require( "kein" );
+const kount = require( "kount" );
+const petrifi = require( "petrifi" );
 const plough = require( "plough" );
 const protype = require( "protype" );
 const truly = require( "truly" );
 const U200b = require( "u200b" );
+const wichis = require( "wichis" );
 
 const LOOSENED = "loosened";
+const MARK = Symbol( "mark" );
 const REFERENCE_PATTERN = /^\./;
 const ACCUMULATOR_PATTERN = /\.{3}/;
 
@@ -133,11 +143,13 @@ const loosen = function loosen( entity, path, cache, compressed ){
 		throw new Error( "invalid entity" );
 	}
 
-	entity = entity || { };
+	entity = wichis( entity, { } );
 
 	if( entity.LOOSENED === LOOSENED ){
 		return entity;
 	}
+
+	entity = karv( entity );
 
 	let parameter = budge( arguments );
 
@@ -146,6 +158,19 @@ const loosen = function loosen( entity, path, cache, compressed ){
 	cache = depher( parameter, OBJECT, { } );
 
 	compressed = depher( parameter, BOOLEAN, false );
+
+	harden( "reference", wichis( cache.reference, { } ), cache );
+
+	let index = kount( cache.reference );
+
+	if( kein( cache.reference, index ) ||
+ 		( kein( entity, MARK ) && kein( cache.reference, entity[ MARK ] ) ) )
+	{
+		return cache;
+	}
+
+	entity[ MARK ] = index;
+	petrifi( index, true, cache.reference );
 
 	let element = null;
 	if( doubt( entity, ARRAY ) ){

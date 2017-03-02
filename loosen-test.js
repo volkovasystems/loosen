@@ -31,3 +31,9 @@ let test = {
 console.log( require( "util" ).inspect( loosen( test ), { "showHidden": true } ) );
 
 console.log( require( "util" ).inspect( loosen( test, true ), { "showHidden": true } ) );
+
+console.log( require( "util" ).inspect( loosen( global, true ), { "showHidden": true } ) );
+
+console.log( loosen( global ) );
+
+console.log( require( "util" ).inspect( loosen( global ), { "showHidden": true } ) );

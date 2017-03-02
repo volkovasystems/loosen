@@ -54,25 +54,35 @@
               			"depher": "depher",
               			"doubt": "doubt",
               			"harden": "harden",
+              			"karv": "karv",
               			"kein": "kein",
+              			"kount": "kount",
+              			"petrifi": "petrifi",
+              			"plough": "plough",
               			"protype": "protype",
               			"truly": "truly",
-              			"U200b": "u200b"
+              			"U200b": "u200b",
+              			"wichis": "wichis"
               		}
               	@end-include
-              */var _keys = require("babel-runtime/core-js/object/keys");var _keys2 = _interopRequireDefault(_keys);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+              */var _keys = require("babel-runtime/core-js/object/keys");var _keys2 = _interopRequireDefault(_keys);var _symbol = require("babel-runtime/core-js/symbol");var _symbol2 = _interopRequireDefault(_symbol);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 var budge = require("budge");
 var depher = require("depher");
 var doubt = require("doubt");
 var harden = require("harden");
+var karv = require("karv");
 var kein = require("kein");
+var kount = require("kount");
+var petrifi = require("petrifi");
 var plough = require("plough");
 var protype = require("protype");
 var truly = require("truly");
 var U200b = require("u200b");
+var wichis = require("wichis");
 
 var LOOSENED = "loosened";
+var MARK = (0, _symbol2.default)("mark");
 var REFERENCE_PATTERN = /^\./;
 var ACCUMULATOR_PATTERN = /\.{3}/;
 
@@ -133,11 +143,13 @@ var loosen = function loosen(entity, path, cache, compressed) {
 		throw new Error("invalid entity");
 	}
 
-	entity = entity || {};
+	entity = wichis(entity, {});
 
 	if (entity.LOOSENED === LOOSENED) {
 		return entity;
 	}
+
+	entity = karv(entity);
 
 	var parameter = budge(arguments);
 
@@ -147,14 +159,27 @@ var loosen = function loosen(entity, path, cache, compressed) {
 
 	compressed = depher(parameter, BOOLEAN, false);
 
+	harden("reference", wichis(cache.reference, {}), cache);
+
+	var index = kount(cache.reference);
+
+	if (kein(cache.reference, index) ||
+	kein(entity, MARK) && kein(cache.reference, entity[MARK]))
+	{
+		return cache;
+	}
+
+	entity[MARK] = index;
+	petrifi(index, true, cache.reference);
+
 	var element = null;
 	if (doubt(entity, ARRAY)) {
 		var key = "";
 
-		for (var index = 0, length = entity.length; index < length; index++) {
-			key = U200b(path, index).join(".").replace(REFERENCE_PATTERN, "");
+		for (var _index = 0, length = entity.length; _index < length; _index++) {
+			key = U200b(path, _index).join(".").replace(REFERENCE_PATTERN, "");
 
-			element = entity[index];
+			element = entity[_index];
 
 			if (protype(element, OBJECT)) {
 				if (!compressed) {
