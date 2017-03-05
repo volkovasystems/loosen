@@ -1,9 +1,11 @@
 yarn add \
 babel-runtime \
+arkount \
 budge \
 depher \
 doubt \
 harden \
+impel \
 karv \
 kein \
 kount \
@@ -12,6 +14,7 @@ plough \
 protype \
 truly \
 u200b \
+wichevr \
 wichis \
 --save && \
 yarn add \
@@ -23,10 +26,12 @@ source-map-loader \
 webpack \
 --dev && \
 bower install \
+arkount \
 budge \
 depher \
 doubt \
 harden \
+impel \
 karv \
 kein \
 kount \
@@ -35,6 +40,7 @@ plough \
 protype \
 truly \
 u200b \
+wichevr \
 wichis \
 --save \
 --force-latest

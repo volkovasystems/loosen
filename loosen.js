@@ -50,6 +50,7 @@
 
 	@include:
 		{
+			"arkount": "arkount",
 			"budge": "budge",
 			"depher": "depher",
 			"doubt": "doubt",
@@ -62,15 +63,18 @@
 			"protype": "protype",
 			"truly": "truly",
 			"U200b": "u200b",
+			"wichevr": "wichevr",
 			"wichis": "wichis"
 		}
 	@end-include
 */
 
+const arkount = require( "arkount" );
 const budge = require( "budge" );
 const depher = require( "depher" );
 const doubt = require( "doubt" );
 const harden = require( "harden" );
+const impel = require( "impel" );
 const karv = require( "karv" );
 const kein = require( "kein" );
 const kount = require( "kount" );
@@ -79,12 +83,23 @@ const plough = require( "plough" );
 const protype = require( "protype" );
 const truly = require( "truly" );
 const U200b = require( "u200b" );
+const wichevr = require( "wichevr" );
 const wichis = require( "wichis" );
 
+/*;
+	@note:
+		The dot pattern should just check non-accumulator symbols.
+	@end-note
+*/
+const DOT_PATTERN = /\.{1}/g;
+const FORMAT = Symbol.for( "format" );
 const LOOSENED = "loosened";
 const MARK = Symbol( "mark" );
 const REFERENCE_PATTERN = /^\./;
 const ACCUMULATOR_PATTERN = /\.{3}/;
+
+harden( "ARRAY_FORMAT", "array-format" );
+harden( "OBJECT_FORMAT", "object-format" );
 
 /*;
 	@internal-method-documentation:
@@ -92,13 +107,14 @@ const ACCUMULATOR_PATTERN = /\.{3}/;
 			is an accumulator path and should accumulate values.
 	@end-internal-method-documentation
 */
-const push = function push( cache, key, element ){
+const push = function push( cache, key, element, limiter ){
 	/*;
 		@meta-configuration:
 			{
 				"cache:required": "object",
 				"key:required": "string",
-				"element:required": "*"
+				"element:required": "*",
+				"limiter": "function"
 			}
 		@end-meta-configuration
 	*/
@@ -109,6 +125,10 @@ const push = function push( cache, key, element ){
 
 	if( !protype( key, STRING ) ){
 		throw new Error( "invalid key" );
+	}
+
+	if( limiter( element, key ) ){
+		return cache;
 	}
 
 	if( ACCUMULATOR_PATTERN.test( key ) &&
@@ -124,7 +144,7 @@ const push = function push( cache, key, element ){
 	return cache;
 };
 
-const loosen = function loosen( entity, path, cache, compressed ){
+const loosen = function loosen( entity, path, cache, compressed, depth, limiter ){
 	/*;
 		@meta-configuration:
 			{
@@ -134,7 +154,9 @@ const loosen = function loosen( entity, path, cache, compressed ){
 				],
 				"path": "string",
 				"cache": "object",
-				"compressed": "boolean"
+				"compressed": "boolean",
+				"depth": "number",
+				"limiter": "function"
 			}
 		@end-meta-configuration
 	*/
@@ -149,8 +171,6 @@ const loosen = function loosen( entity, path, cache, compressed ){
 		return entity;
 	}
 
-	entity = karv( entity );
-
 	let parameter = budge( arguments );
 
 	path = depher( parameter, STRING, "" );
@@ -158,6 +178,28 @@ const loosen = function loosen( entity, path, cache, compressed ){
 	cache = depher( parameter, OBJECT, { } );
 
 	compressed = depher( parameter, BOOLEAN, false );
+
+	depth = depher( parameter, NUMBER, Infinity );
+
+	limiter = depher( parameter, FUNCTION, function limiter( element, key ){ return false; } );
+
+	/*;
+		@note:
+			If depth is not infinite or falsy, then it will process only on that level
+				and we can disregard other data.
+		@end-note
+	*/
+	if( truly( depth ) && truly( path ) && arkount( path.match( DOT_PATTERN ) ) == depth ){
+		return cache;
+	}
+
+	/*;
+		@note:
+			The following lines of code will resolve possible issues
+				with circular dependency, frozen, sealed and non-extensible objects.
+		@end-note
+	*/
+	entity = karv( entity );
 
 	harden( "reference", wichis( cache.reference, { } ), cache );
 
@@ -174,19 +216,21 @@ const loosen = function loosen( entity, path, cache, compressed ){
 
 	let element = null;
 	if( doubt( entity, ARRAY ) ){
+		impel( FORMAT, ARRAY_FORMAT, cache );
+
 		let key = "";
 
-		for( let index = 0, length = entity.length; index < length; index++ ){
+		for( let index = 0, length = arkount( entity ); index < length; index++ ){
 			key = U200b( path, index ).join( "." ).replace( REFERENCE_PATTERN, "" );
 
 			element = entity[ index ];
 
 			if( protype( element, OBJECT ) ){
 				if( !compressed ){
-					push( cache, key, element );
+					push( cache, key, element, limiter );
 				}
 
-				loosen( element, key, cache, compressed );
+				loosen( element, key, cache, compressed, depth, limiter );
 
 				/*;
 					@note:
@@ -197,25 +241,28 @@ const loosen = function loosen( entity, path, cache, compressed ){
 				*/
 				if( !compressed ){
 					for( let property in element ){
-						let key = U200b( path, property ).join( "..." ).replace( REFERENCE_PATTERN, "" );
+						let key = U200b( path, property )
+							.join( "..." ).replace( REFERENCE_PATTERN, "" );
 
 						let data = element[ property ];
 
-						let list = cache[ key ] = cache[ key ] || [ ];
+						let list = cache[ key ] = wichevr( cache[ key ], [ ] );
 						list.push( data );
 
 						if( protype( data, OBJECT ) ){
-							loosen( data, key, cache, compressed );
+							loosen( data, key, cache, compressed, depth, limiter );
 						}
 					}
 				}
 
 			}else{
-				push( cache, key, element );
+				push( cache, key, element, limiter );
 			}
 		}
 
 	}else if( protype( entity, OBJECT ) ){
+		impel( FORMAT, OBJECT_FORMAT, cache );
+
 		Object.keys( entity )
 			.forEach( function onEachKey( key ){
 				element = entity[ key ];
@@ -224,13 +271,13 @@ const loosen = function loosen( entity, path, cache, compressed ){
 
 				if( protype( element, OBJECT ) ){
 					if( !compressed ){
-						push( cache, key, element );
+						push( cache, key, element, limiter );
 					}
 
-					loosen( element, key, cache, compressed );
+					loosen( element, key, cache, compressed, depth, limiter );
 
 				}else{
-					push( cache, key, element );
+					push( cache, key, element, limiter );
 				}
 			} );
 	}

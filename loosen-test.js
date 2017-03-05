@@ -34,6 +34,7 @@ console.log( require( "util" ).inspect( loosen( test, true ), { "showHidden": tr
 
 console.log( require( "util" ).inspect( loosen( global, true ), { "showHidden": true } ) );
 
-console.log( loosen( global ) );
+console.log( loosen( global, true, 1 ) );
 
-console.log( require( "util" ).inspect( loosen( global ), { "showHidden": true } ) );
+const protype = require( "protype" );
+console.log( loosen( global, true, ( element ) => { return protype( element, FUNCTION ); } ) );

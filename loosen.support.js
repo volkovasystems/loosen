@@ -50,6 +50,7 @@
               
               	@include:
               		{
+              			"arkount": "arkount",
               			"budge": "budge",
               			"depher": "depher",
               			"doubt": "doubt",
@@ -62,15 +63,18 @@
               			"protype": "protype",
               			"truly": "truly",
               			"U200b": "u200b",
+              			"wichevr": "wichevr",
               			"wichis": "wichis"
               		}
               	@end-include
-              */var _keys = require("babel-runtime/core-js/object/keys");var _keys2 = _interopRequireDefault(_keys);var _symbol = require("babel-runtime/core-js/symbol");var _symbol2 = _interopRequireDefault(_symbol);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+              */var _keys = require("babel-runtime/core-js/object/keys");var _keys2 = _interopRequireDefault(_keys);var _symbol = require("babel-runtime/core-js/symbol");var _symbol2 = _interopRequireDefault(_symbol);var _for = require("babel-runtime/core-js/symbol/for");var _for2 = _interopRequireDefault(_for);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
+var arkount = require("arkount");
 var budge = require("budge");
 var depher = require("depher");
 var doubt = require("doubt");
 var harden = require("harden");
+var impel = require("impel");
 var karv = require("karv");
 var kein = require("kein");
 var kount = require("kount");
@@ -79,29 +83,41 @@ var plough = require("plough");
 var protype = require("protype");
 var truly = require("truly");
 var U200b = require("u200b");
+var wichevr = require("wichevr");
 var wichis = require("wichis");
 
+/*;
+                                	@note:
+                                		The dot pattern should just check non-accumulator symbols.
+                                	@end-note
+                                */
+var DOT_PATTERN = /\.{1}/g;
+var FORMAT = (0, _for2.default)("format");
 var LOOSENED = "loosened";
 var MARK = (0, _symbol2.default)("mark");
 var REFERENCE_PATTERN = /^\./;
 var ACCUMULATOR_PATTERN = /\.{3}/;
 
+harden("ARRAY_FORMAT", "array-format");
+harden("OBJECT_FORMAT", "object-format");
+
 /*;
-                                   	@internal-method-documentation:
-                                   		We separate the push function because this will manage if the key
-                                   			is an accumulator path and should accumulate values.
-                                   	@end-internal-method-documentation
-                                   */
-var push = function push(cache, key, element) {
+                                          	@internal-method-documentation:
+                                          		We separate the push function because this will manage if the key
+                                          			is an accumulator path and should accumulate values.
+                                          	@end-internal-method-documentation
+                                          */
+var push = function push(cache, key, element, limiter) {
 	/*;
-                                               	@meta-configuration:
-                                               		{
-                                               			"cache:required": "object",
-                                               			"key:required": "string",
-                                               			"element:required": "*"
-                                               		}
-                                               	@end-meta-configuration
-                                               */
+                                                        	@meta-configuration:
+                                                        		{
+                                                        			"cache:required": "object",
+                                                        			"key:required": "string",
+                                                        			"element:required": "*",
+                                                        			"limiter": "function"
+                                                        		}
+                                                        	@end-meta-configuration
+                                                        */
 
 	if (!protype(cache, OBJECT)) {
 		throw new Error("invalid cache");
@@ -109,6 +125,10 @@ var push = function push(cache, key, element) {
 
 	if (!protype(key, STRING)) {
 		throw new Error("invalid key");
+	}
+
+	if (limiter(element, key)) {
+		return cache;
 	}
 
 	if (ACCUMULATOR_PATTERN.test(key) &&
@@ -124,20 +144,22 @@ var push = function push(cache, key, element) {
 	return cache;
 };
 
-var loosen = function loosen(entity, path, cache, compressed) {
+var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 	/*;
-                                                               	@meta-configuration:
-                                                               		{
-                                                               			"entity:required": [
-                                                               				Array,
-                                                               				"object"
-                                                               			],
-                                                               			"path": "string",
-                                                               			"cache": "object",
-                                                               			"compressed": "boolean"
-                                                               		}
-                                                               	@end-meta-configuration
-                                                               */
+                                                                               	@meta-configuration:
+                                                                               		{
+                                                                               			"entity:required": [
+                                                                               				Array,
+                                                                               				"object"
+                                                                               			],
+                                                                               			"path": "string",
+                                                                               			"cache": "object",
+                                                                               			"compressed": "boolean",
+                                                                               			"depth": "number",
+                                                                               			"limiter": "function"
+                                                                               		}
+                                                                               	@end-meta-configuration
+                                                                               */
 
 	if (!protype(entity, OBJECT)) {
 		throw new Error("invalid entity");
@@ -149,8 +171,6 @@ var loosen = function loosen(entity, path, cache, compressed) {
 		return entity;
 	}
 
-	entity = karv(entity);
-
 	var parameter = budge(arguments);
 
 	path = depher(parameter, STRING, "");
@@ -158,6 +178,28 @@ var loosen = function loosen(entity, path, cache, compressed) {
 	cache = depher(parameter, OBJECT, {});
 
 	compressed = depher(parameter, BOOLEAN, false);
+
+	depth = depher(parameter, NUMBER, Infinity);
+
+	limiter = depher(parameter, FUNCTION, function limiter(element, key) {return false;});
+
+	/*;
+                                                                                        	@note:
+                                                                                        		If depth is not infinite or falsy, then it will process only on that level
+                                                                                        			and we can disregard other data.
+                                                                                        	@end-note
+                                                                                        */
+	if (truly(depth) && truly(path) && arkount(path.match(DOT_PATTERN)) == depth) {
+		return cache;
+	}
+
+	/*;
+   	@note:
+   		The following lines of code will resolve possible issues
+   			with circular dependency, frozen, sealed and non-extensible objects.
+   	@end-note
+   */
+	entity = karv(entity);
 
 	harden("reference", wichis(cache.reference, {}), cache);
 
@@ -174,48 +216,53 @@ var loosen = function loosen(entity, path, cache, compressed) {
 
 	var element = null;
 	if (doubt(entity, ARRAY)) {
+		impel(FORMAT, ARRAY_FORMAT, cache);
+
 		var key = "";
 
-		for (var _index = 0, length = entity.length; _index < length; _index++) {
+		for (var _index = 0, length = arkount(entity); _index < length; _index++) {
 			key = U200b(path, _index).join(".").replace(REFERENCE_PATTERN, "");
 
 			element = entity[_index];
 
 			if (protype(element, OBJECT)) {
 				if (!compressed) {
-					push(cache, key, element);
+					push(cache, key, element, limiter);
 				}
 
-				loosen(element, key, cache, compressed);
+				loosen(element, key, cache, compressed, depth, limiter);
 
 				/*;
-                                             	@note:
-                                             		This is the accumulator logic.
-                                             			This will try to accumulate values of the same path.
-                                             	@end-note
-                                             */
+                                                             	@note:
+                                                             		This is the accumulator logic.
+                                                             			This will try to accumulate values of the same path.
+                                                             	@end-note
+                                                             */
 
 				if (!compressed) {
 					for (var property in element) {
-						var _key = U200b(path, property).join("...").replace(REFERENCE_PATTERN, "");
+						var _key = U200b(path, property).
+						join("...").replace(REFERENCE_PATTERN, "");
 
 						var data = element[property];
 
-						var list = cache[_key] = cache[_key] || [];
+						var list = cache[_key] = wichevr(cache[_key], []);
 						list.push(data);
 
 						if (protype(data, OBJECT)) {
-							loosen(data, _key, cache, compressed);
+							loosen(data, _key, cache, compressed, depth, limiter);
 						}
 					}
 				}
 
 			} else {
-				push(cache, key, element);
+				push(cache, key, element, limiter);
 			}
 		}
 
 	} else if (protype(entity, OBJECT)) {
+		impel(FORMAT, OBJECT_FORMAT, cache);
+
 		(0, _keys2.default)(entity).
 		forEach(function onEachKey(key) {
 			element = entity[key];
@@ -224,13 +271,13 @@ var loosen = function loosen(entity, path, cache, compressed) {
 
 			if (protype(element, OBJECT)) {
 				if (!compressed) {
-					push(cache, key, element);
+					push(cache, key, element, limiter);
 				}
 
-				loosen(element, key, cache, compressed);
+				loosen(element, key, cache, compressed, depth, limiter);
 
 			} else {
-				push(cache, key, element);
+				push(cache, key, element, limiter);
 			}
 		});
 	}
