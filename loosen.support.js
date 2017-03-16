@@ -132,7 +132,7 @@ var push = function push(cache, key, element, limiter) {
 	}
 
 	if (ACCUMULATOR_PATTERN.test(key) &&
-	kein(cache, key) &&
+	kein(key, cache) &&
 	!doubt(element, ARRAY))
 	{
 		cache[key] = plough(cache[key], element);
@@ -205,8 +205,8 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 
 	var index = kount(cache.reference);
 
-	if (kein(cache.reference, index) ||
-	kein(entity, MARK) && kein(cache.reference, entity[MARK]))
+	if (kein(index, cache.reference) ||
+	kein(MARK, entity) && kein(entity[MARK], cache.reference))
 	{
 		return cache;
 	}
