@@ -1490,14 +1490,12 @@ ieee754@^1.1.4:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.8.tgz#be33d40ac10ef1926701f6f08a2d86fbfd1ad3e4"
 
-impel@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/impel/-/impel-0.9.0.tgz#a3a458d1732a94d47a06438a608a182935f8981a"
+impel@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/impel/-/impel-0.11.0.tgz#d58eaab51f45468dd496cb278e3eff21b1c5a4d7"
   dependencies:
-    asea "^0.13.0"
     babel-runtime "^6.23.0"
     falzy "^0.17.0"
-    kein "^0.16.0"
     protype "^0.21.0"
     zelf "^0.11.0"
 
@@ -2494,9 +2492,9 @@ source-list-map@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-1.1.1.tgz#1a33ac210ca144d1e561f906ebccab5669ff4cb4"
 
-source-map-loader@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/source-map-loader/-/source-map-loader-0.2.0.tgz#aba0cf717a1d7ee29fc30f31cc0c441d78ea42ba"
+source-map-loader@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/source-map-loader/-/source-map-loader-0.2.1.tgz#48126be9230bd47fad05e46a8c3c2e3d2dabe507"
   dependencies:
     async "^0.9.0"
     loader-utils "~0.2.2"
@@ -2737,8 +2735,8 @@ u200b@^0.19.0:
     wichevr "^0.7.0"
 
 uglify-js@^2.6, uglify-js@^2.8.5:
-  version "2.8.18"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.18.tgz#925d14bae48ab62d1883b41afe6e2261662adb8e"
+  version "2.8.20"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.20.tgz#be87100fbc18de3876ed606e9d24b4568311cecf"
   dependencies:
     source-map "~0.5.1"
     yargs "~3.10.0"
@@ -2779,8 +2777,8 @@ uuid@^3.0.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
 
 v8flags@^2.0.10:
-  version "2.0.11"
-  resolved "https://registry.yarnpkg.com/v8flags/-/v8flags-2.0.11.tgz#bca8f30f0d6d60612cc2c00641e6962d42ae6881"
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/v8flags/-/v8flags-2.0.12.tgz#73235d9f7176f8e8833fb286795445f7938d84e5"
   dependencies:
     user-home "^1.1.1"
 

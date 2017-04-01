@@ -1,6 +1,6 @@
 {
   "name": "loosen",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Transform deep object into shallow object.",
   "main": "loosen.deploy.js",
   "support": "loosen.support.js",
@@ -29,7 +29,7 @@
     "depher": "^0.23.0",
     "doubt": "^0.24.0",
     "harden": "^0.21.0",
-    "impel": "^0.9.0",
+    "impel": "^0.11.0",
     "karv": "^0.3.0",
     "kein": "^0.16.0",
     "kount": "^0.10.0",

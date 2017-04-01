@@ -203,16 +203,17 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 
 	harden("reference", wichis(cache.reference, {}), cache);
 
-	var index = kount(cache.reference);
+	var reference = cache.reference;
+	var index = kount(reference);
 
-	if (kein(index, cache.reference) ||
-	kein(MARK, entity) && kein(entity[MARK], cache.reference))
+	if (kein(index, reference) ||
+	kein(MARK, entity) && kein(entity[MARK], reference))
 	{
 		return cache;
 	}
 
 	entity[MARK] = index;
-	petrifi(index, true, cache.reference);
+	petrifi(index, true, reference);
 
 	var element = null;
 	if (doubt(entity, ARRAY)) {
@@ -240,19 +241,19 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
                                                              */
 
 				if (!compressed) {
-					for (var property in element) {
-						var _key = U200b(path, property).
+					(0, _keys2.default)(element).forEach(function onEachKey(property) {
+						var key = U200b(path, property).
 						join("...").replace(REFERENCE_PATTERN, "");
 
 						var data = element[property];
 
-						var list = cache[_key] = wichevr(cache[_key], []);
+						var list = cache[key] = wichevr(cache[key], []);
 						list.push(data);
 
 						if (protype(data, OBJECT)) {
-							loosen(data, _key, cache, compressed, depth, limiter);
+							loosen(data, key, cache, compressed, depth, limiter);
 						}
-					}
+					});
 				}
 
 			} else {
