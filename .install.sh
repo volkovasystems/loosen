@@ -1,7 +1,7 @@
 yarn add \
 babel-runtime \
-arkount \
 budge \
+burne \
 depher \
 doubt \
 harden \
@@ -9,6 +9,8 @@ impel \
 karv \
 kein \
 kount \
+mrkd \
+mtch \
 petrifi \
 plough \
 protype \
@@ -26,8 +28,8 @@ source-map-loader \
 webpack \
 --dev && \
 bower install \
-arkount \
 budge \
+burne \
 depher \
 doubt \
 harden \
@@ -35,6 +37,8 @@ impel \
 karv \
 kein \
 kount \
+mrkd \
+mtch \
 petrifi \
 plough \
 protype \

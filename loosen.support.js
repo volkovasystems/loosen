@@ -50,14 +50,17 @@
               
               	@include:
               		{
-              			"arkount": "arkount",
               			"budge": "budge",
+              			"burne": "burne",
               			"depher": "depher",
               			"doubt": "doubt",
               			"harden": "harden",
+              			"impel": "impel",
               			"karv": "karv",
               			"kein": "kein",
               			"kount": "kount",
+              			"mrkd": "mrkd",
+              			"mtch": "mtch",
               			"petrifi": "petrifi",
               			"plough": "plough",
               			"protype": "protype",
@@ -69,8 +72,8 @@
               	@end-include
               */var _keys = require("babel-runtime/core-js/object/keys");var _keys2 = _interopRequireDefault(_keys);var _symbol = require("babel-runtime/core-js/symbol");var _symbol2 = _interopRequireDefault(_symbol);var _for = require("babel-runtime/core-js/symbol/for");var _for2 = _interopRequireDefault(_for);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
-var arkount = require("arkount");
 var budge = require("budge");
+var burne = require("burne");
 var depher = require("depher");
 var doubt = require("doubt");
 var harden = require("harden");
@@ -78,6 +81,8 @@ var impel = require("impel");
 var karv = require("karv");
 var kein = require("kein");
 var kount = require("kount");
+var mrkd = require("mrkd");
+var mtch = require("mtch");
 var petrifi = require("petrifi");
 var plough = require("plough");
 var protype = require("protype");
@@ -93,7 +98,7 @@ var wichis = require("wichis");
                                 */
 var DOT_PATTERN = /\.{1}/g;
 var FORMAT = (0, _for2.default)("format");
-var LOOSENED = "loosened";
+var LOOSENED = (0, _symbol2.default)("loosened");
 var MARK = (0, _symbol2.default)("mark");
 var REFERENCE_PATTERN = /^\./;
 var ACCUMULATOR_PATTERN = /\.{3}/;
@@ -131,10 +136,7 @@ var push = function push(cache, key, element, limiter) {
 		return cache;
 	}
 
-	if (ACCUMULATOR_PATTERN.test(key) &&
-	kein(key, cache) &&
-	!doubt(element, ARRAY))
-	{
+	if (ACCUMULATOR_PATTERN.test(key) && kein(key, cache) && !doubt(element, ARRAY)) {
 		cache[key] = plough(cache[key], element);
 
 	} else {
@@ -167,7 +169,7 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 
 	entity = wichis(entity, {});
 
-	if (entity.LOOSENED === LOOSENED) {
+	if (mrkd(LOOSENED, entity, true)) {
 		return entity;
 	}
 
@@ -189,7 +191,9 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
                                                                                         			and we can disregard other data.
                                                                                         	@end-note
                                                                                         */
-	if (truly(depth) && truly(path) && arkount(path.match(DOT_PATTERN)) == depth) {
+	if (truly(depth) && isFinite(depth) &&
+	truly(path) && mtch(path, DOT_PATTERN).length == depth)
+	{
 		return cache;
 	}
 
@@ -219,12 +223,8 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 	if (doubt(entity, ARRAY)) {
 		impel(FORMAT, ARRAY_FORMAT, cache);
 
-		var key = "";
-
-		for (var _index = 0, length = arkount(entity); _index < length; _index++) {
-			key = U200b(path, _index).join(".").replace(REFERENCE_PATTERN, "");
-
-			element = entity[_index];
+		entity.forEach(function onEachElement(element, index) {
+			var key = U200b(path, index).join(".").replace(REFERENCE_PATTERN, "");
 
 			if (protype(element, OBJECT)) {
 				if (!compressed) {
@@ -259,7 +259,7 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 			} else {
 				push(cache, key, element, limiter);
 			}
-		}
+		});
 
 	} else if (protype(entity, OBJECT)) {
 		impel(FORMAT, OBJECT_FORMAT, cache);
@@ -283,7 +283,7 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 		});
 	}
 
-	harden("LOOSENED", LOOSENED, cache);
+	burne(LOOSENED, cache);
 
 	return cache;
 };

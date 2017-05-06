@@ -50,14 +50,17 @@
 
 	@include:
 		{
-			"arkount": "arkount",
 			"budge": "budge",
+			"burne": "burne",
 			"depher": "depher",
 			"doubt": "doubt",
 			"harden": "harden",
+			"impel": "impel",
 			"karv": "karv",
 			"kein": "kein",
 			"kount": "kount",
+			"mrkd": "mrkd",
+			"mtch": "mtch",
 			"petrifi": "petrifi",
 			"plough": "plough",
 			"protype": "protype",
@@ -69,8 +72,8 @@
 	@end-include
 */
 
-const arkount = require( "arkount" );
 const budge = require( "budge" );
+const burne = require( "burne" );
 const depher = require( "depher" );
 const doubt = require( "doubt" );
 const harden = require( "harden" );
@@ -78,6 +81,8 @@ const impel = require( "impel" );
 const karv = require( "karv" );
 const kein = require( "kein" );
 const kount = require( "kount" );
+const mrkd = require( "mrkd" );
+const mtch = require( "mtch" );
 const petrifi = require( "petrifi" );
 const plough = require( "plough" );
 const protype = require( "protype" );
@@ -93,7 +98,7 @@ const wichis = require( "wichis" );
 */
 const DOT_PATTERN = /\.{1}/g;
 const FORMAT = Symbol.for( "format" );
-const LOOSENED = "loosened";
+const LOOSENED = Symbol( "loosened" );
 const MARK = Symbol( "mark" );
 const REFERENCE_PATTERN = /^\./;
 const ACCUMULATOR_PATTERN = /\.{3}/;
@@ -131,10 +136,7 @@ const push = function push( cache, key, element, limiter ){
 		return cache;
 	}
 
-	if( ACCUMULATOR_PATTERN.test( key ) &&
-		kein( key, cache ) &&
-		!doubt( element, ARRAY ) )
-	{
+	if( ACCUMULATOR_PATTERN.test( key ) && kein( key, cache ) && !doubt( element, ARRAY ) ){
 		cache[ key ] = plough( cache[ key ], element );
 
 	}else{
@@ -167,7 +169,7 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 
 	entity = wichis( entity, { } );
 
-	if( entity.LOOSENED === LOOSENED ){
+	if( mrkd( LOOSENED, entity, true ) ){
 		return entity;
 	}
 
@@ -189,7 +191,9 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 				and we can disregard other data.
 		@end-note
 	*/
-	if( truly( depth ) && truly( path ) && arkount( path.match( DOT_PATTERN ) ) == depth ){
+	if( truly( depth ) && isFinite( depth ) &&
+		truly( path ) && mtch( path, DOT_PATTERN ).length == depth )
+	{
 		return cache;
 	}
 
@@ -219,12 +223,8 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 	if( doubt( entity, ARRAY ) ){
 		impel( FORMAT, ARRAY_FORMAT, cache );
 
-		let key = "";
-
-		for( let index = 0, length = arkount( entity ); index < length; index++ ){
-			key = U200b( path, index ).join( "." ).replace( REFERENCE_PATTERN, "" );
-
-			element = entity[ index ];
+		entity.forEach( function onEachElement( element, index ){
+			let key = U200b( path, index ).join( "." ).replace( REFERENCE_PATTERN, "" );
 
 			if( protype( element, OBJECT ) ){
 				if( !compressed ){
@@ -259,7 +259,7 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 			}else{
 				push( cache, key, element, limiter );
 			}
-		}
+		} );
 
 	}else if( protype( entity, OBJECT ) ){
 		impel( FORMAT, OBJECT_FORMAT, cache );
@@ -283,7 +283,7 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 			} );
 	}
 
-	harden( "LOOSENED", LOOSENED, cache );
+	burne( LOOSENED, cache );
 
 	return cache;
 };
