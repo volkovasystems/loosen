@@ -1,5 +1,3 @@
-"use strict";
-
 const loosen = require( "./loosen.js" );
 
 let test = {
