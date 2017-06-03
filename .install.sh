@@ -1,6 +1,5 @@
 yarn add \
 babel-runtime \
-budge \
 burne \
 depher \
 doubt \
@@ -14,6 +13,7 @@ mtch \
 petrifi \
 plough \
 protype \
+shft \
 truly \
 u200b \
 wichevr \
@@ -28,7 +28,6 @@ source-map-loader \
 webpack \
 --dev && \
 bower install \
-budge \
 burne \
 depher \
 doubt \
@@ -42,6 +41,7 @@ mtch \
 petrifi \
 plough \
 protype \
+shft \
 truly \
 u200b \
 wichevr \
