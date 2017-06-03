@@ -50,7 +50,6 @@
               
               	@include:
               		{
-              			"budge": "budge",
               			"burne": "burne",
               			"depher": "depher",
               			"doubt": "doubt",
@@ -64,6 +63,7 @@
               			"petrifi": "petrifi",
               			"plough": "plough",
               			"protype": "protype",
+              			"shft": "shft",
               			"truly": "truly",
               			"U200b": "u200b",
               			"wichevr": "wichevr",
@@ -72,7 +72,6 @@
               	@end-include
               */var _keys = require("babel-runtime/core-js/object/keys");var _keys2 = _interopRequireDefault(_keys);var _symbol = require("babel-runtime/core-js/symbol");var _symbol2 = _interopRequireDefault(_symbol);var _for = require("babel-runtime/core-js/symbol/for");var _for2 = _interopRequireDefault(_for);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
-var budge = require("budge");
 var burne = require("burne");
 var depher = require("depher");
 var doubt = require("doubt");
@@ -86,6 +85,7 @@ var mtch = require("mtch");
 var petrifi = require("petrifi");
 var plough = require("plough");
 var protype = require("protype");
+var shft = require("shft");
 var truly = require("truly");
 var U200b = require("u200b");
 var wichevr = require("wichevr");
@@ -173,7 +173,7 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 		return entity;
 	}
 
-	var parameter = budge(arguments);
+	var parameter = shft(arguments);
 
 	path = depher(parameter, STRING, "");
 
