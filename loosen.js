@@ -50,7 +50,6 @@
 
 	@include:
 		{
-			"budge": "budge",
 			"burne": "burne",
 			"depher": "depher",
 			"doubt": "doubt",
@@ -64,6 +63,7 @@
 			"petrifi": "petrifi",
 			"plough": "plough",
 			"protype": "protype",
+			"shft": "shft",
 			"truly": "truly",
 			"U200b": "u200b",
 			"wichevr": "wichevr",
@@ -72,7 +72,6 @@
 	@end-include
 */
 
-const budge = require( "budge" );
 const burne = require( "burne" );
 const depher = require( "depher" );
 const doubt = require( "doubt" );
@@ -86,6 +85,7 @@ const mtch = require( "mtch" );
 const petrifi = require( "petrifi" );
 const plough = require( "plough" );
 const protype = require( "protype" );
+const shft = require( "shft" );
 const truly = require( "truly" );
 const U200b = require( "u200b" );
 const wichevr = require( "wichevr" );
@@ -173,7 +173,7 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 		return entity;
 	}
 
-	let parameter = budge( arguments );
+	let parameter = shft( arguments );
 
 	path = depher( parameter, STRING, "" );
 
