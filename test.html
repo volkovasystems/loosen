@@ -1,8 +1,60 @@
+<!DOCTYPE html>
 <html>
 	<head>
-		<script
-			type="application/javascript"
-			src="./loosen.deploy.js">
-		</script>
+		<title>loosen unit test</title>
+
+		<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.3.2.css">
+
+		<script type="application/javascript" src="https://code.jquery.com/qunit/qunit-2.3.2.js"></script>
+
+		<script type="application/javascript" src="./bower_components/protype/protype.deploy.js"></script>
+
+		<script type="application/javascript" src="./loosen.deploy.js"></script>
 	</head>
+
+	<body>
+		<div id="qunit"></div>
+
+		<div id="qunit-fixture"></div>
+
+		<script type="application/javascript">
+			QUnit.test( "loosen unit test", function( assert ) {
+
+				let test = {
+					"hello": {
+						"world": {
+							"yeah": 1,
+							"ugh": false,
+							"hi": [
+								{
+									"weeeh": {
+										"yehey": 123
+									}
+								},
+								{
+									"weeeh": {
+										"yehey": 1234
+									}
+								},
+								"hello world",
+								123,
+								{
+									"weeeeeeh": 12345
+								}
+							]
+						}
+					}
+				};
+
+				console.log( loosen( test, true ) );
+
+				assert.equal( typeof loosen( test ), "object", "should return 'object'" );
+
+				assert.ok( loosen( window, true, 1 ), "should return only first level of loosened object" );
+
+				assert.ok( loosen( window, true, ( element ) => { return protype( element, FUNCTION ); } ),
+								"should return loosened object with elements that have function data type" );
+			} );
+		</script>
+	</body>
 </html>

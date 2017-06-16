@@ -1,3 +1,5 @@
+const assert = require( "assert" );
+const protype = require( "protype" );
 const loosen = require( "./loosen.js" );
 
 let test = {
@@ -26,13 +28,13 @@ let test = {
 	}
 };
 
-console.log( require( "util" ).inspect( loosen( test ), { "showHidden": true } ) );
-
 console.log( require( "util" ).inspect( loosen( test, true ), { "showHidden": true } ) );
 
-console.log( require( "util" ).inspect( loosen( global, true ), { "showHidden": true } ) );
+assert.equal( typeof loosen( test ), "object", "should return 'object'" );
 
-console.log( loosen( global, true, 1 ) );
+assert.ok( loosen( global, true, 1 ), "should return only first level of loosened object" );
 
-const protype = require( "protype" );
-console.log( loosen( global, true, ( element ) => { return protype( element, FUNCTION ); } ) );
+assert.ok( loosen( global, true, ( element ) => { return protype( element, FUNCTION ); } ),
+				"should return loosened object with function data type" );
+
+console.log( "ok" );
