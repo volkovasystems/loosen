@@ -63,7 +63,6 @@
               			"mtch": "mtch",
               			"petrifi": "petrifi",
               			"plough": "plough",
-              			"protype": "protype",
               			"shft": "shft",
               			"truly": "truly",
               			"U200b": "u200b",
@@ -71,7 +70,7 @@
               			"wichis": "wichis"
               		}
               	@end-include
-              */var _keys = require("babel-runtime/core-js/object/keys");var _keys2 = _interopRequireDefault(_keys);var _symbol = require("babel-runtime/core-js/symbol");var _symbol2 = _interopRequireDefault(_symbol);var _for = require("babel-runtime/core-js/symbol/for");var _for2 = _interopRequireDefault(_for);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+              */var _keys = require("babel-runtime/core-js/object/keys");var _keys2 = _interopRequireDefault(_keys);var _typeof2 = require("babel-runtime/helpers/typeof");var _typeof3 = _interopRequireDefault(_typeof2);var _symbol = require("babel-runtime/core-js/symbol");var _symbol2 = _interopRequireDefault(_symbol);var _for = require("babel-runtime/core-js/symbol/for");var _for2 = _interopRequireDefault(_for);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 var burne = require("burne");
 var depher = require("depher");
@@ -85,7 +84,6 @@ var mrkd = require("mrkd");
 var mtch = require("mtch");
 var petrifi = require("petrifi");
 var plough = require("plough");
-var protype = require("protype");
 var shft = require("shft");
 var truly = require("truly");
 var U200b = require("u200b");
@@ -125,11 +123,11 @@ var push = function push(cache, key, element, limiter) {
                                                         	@end-meta-configuration
                                                         */
 
-	if (!protype(cache, OBJECT)) {
+	if ((typeof cache === "undefined" ? "undefined" : (0, _typeof3.default)(cache)) != "object") {
 		throw new Error("invalid cache");
 	}
 
-	if (!protype(key, STRING)) {
+	if (typeof key != "string") {
 		throw new Error("invalid key");
 	}
 
@@ -164,7 +162,7 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
                                                                                	@end-meta-configuration
                                                                                */
 
-	if (!protype(entity, OBJECT)) {
+	if ((typeof entity === "undefined" ? "undefined" : (0, _typeof3.default)(entity)) != "object") {
 		throw new Error("invalid entity");
 	}
 
@@ -227,7 +225,7 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 		entity.forEach(function onEachElement(element, index) {
 			var key = U200b(path, index).join(".").replace(REFERENCE_PATTERN, "");
 
-			if (protype(element, OBJECT)) {
+			if ((typeof element === "undefined" ? "undefined" : (0, _typeof3.default)(element)) == "object") {
 				if (!compressed) {
 					push(cache, key, element, limiter);
 				}
@@ -251,7 +249,7 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 						var list = cache[key] = wichevr(cache[key], []);
 						list.push(data);
 
-						if (protype(data, OBJECT)) {
+						if ((typeof data === "undefined" ? "undefined" : (0, _typeof3.default)(data)) == "object") {
 							loosen(data, key, cache, compressed, depth, limiter);
 						}
 					});
@@ -262,7 +260,7 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 			}
 		});
 
-	} else if (protype(entity, OBJECT)) {
+	} else if ((typeof entity === "undefined" ? "undefined" : (0, _typeof3.default)(entity)) == "object") {
 		impel(FORMAT, OBJECT_FORMAT, cache);
 
 		(0, _keys2.default)(entity).
@@ -271,7 +269,7 @@ var loosen = function loosen(entity, path, cache, compressed, depth, limiter) {
 
 			key = U200b(path, key).join(".").replace(REFERENCE_PATTERN, "");
 
-			if (protype(element, OBJECT)) {
+			if ((typeof element === "undefined" ? "undefined" : (0, _typeof3.default)(element)) == "object") {
 				if (!compressed) {
 					push(cache, key, element, limiter);
 				}
