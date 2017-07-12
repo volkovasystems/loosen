@@ -33,8 +33,8 @@ console.log( require( "util" ).inspect( loosen( test, true ), { "showHidden": tr
 assert.equal( typeof loosen( test ), "object", "should return 'object'" );
 
 assert.ok( loosen( global, true, 1 ), "should return only first level of loosened object" );
-
+/*
 assert.ok( loosen( global, true, ( element ) => { return protype( element, FUNCTION ); } ),
 				"should return loosened object with function data type" );
-
+*/
 console.log( "ok" );
