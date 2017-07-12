@@ -12,7 +12,6 @@ mrkd \
 mtch \
 petrifi \
 plough \
-protype \
 shft \
 truly \
 u200b \
@@ -40,7 +39,6 @@ mrkd \
 mtch \
 petrifi \
 plough \
-protype \
 shft \
 truly \
 u200b \
