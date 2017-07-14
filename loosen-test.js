@@ -1,7 +1,7 @@
 const assert = require( "assert" );
 const protype = require( "protype" );
 const loosen = require( "./loosen.js" );
-
+/*
 let test = {
 	"hello": {
 		"world": {
@@ -31,6 +31,7 @@ let test = {
 console.log( require( "util" ).inspect( loosen( test, true ), { "showHidden": true } ) );
 
 assert.equal( typeof loosen( test ), "object", "should return 'object'" );
+*/
 
 assert.ok( loosen( global, true, 1 ), "should return only first level of loosened object" );
 /*
