@@ -48,12 +48,50 @@
 
 				console.log( loosen( test, true ) );
 
-				assert.equal( typeof loosen( test ), "object", "should return 'object'" );
+				assert.equal( typeof loosen( test ), "object", "should be object data type" );
 
-				assert.ok( loosen( window, true, 1 ), "should return only first level of loosened object" );
+				assert.ok( loosen( window, true, 1 ), "should only contain first level of loosened object" );
 
 				assert.ok( loosen( window, true, ( element ) => { return protype( element, FUNCTION ); } ),
-								"should return loosened object with elements that have function data type" );
+					"should be equal to loosened object containing function data only" );
+
+				/*
+				let test = {
+					"hello": {
+						"world": {
+							"yeah": 1,
+							"ugh": false,
+							"hi": [
+								{
+									"weeeh": {
+										"yehey": 123
+									}
+								},
+								{
+									"weeeh": {
+										"yehey": 1234
+									}
+								},
+								"hello world",
+								123,
+								{
+									"weeeeeeh": 12345
+								}
+							]
+						}
+					}
+				};
+
+				console.log( loosen( test, true ) );
+
+				assert.equal( typeof loosen( test ), "object", "should return 'object'" );
+
+				assert.ok( loosen( window, true, 1 ), "should only contain first level of loosened object" );
+
+				assert.ok( loosen( window, true, ( element ) => { return protype( element, FUNCTION ); } ),
+							"should return loosened object with elements that have function data type" );
+				*/
+
 			} );
 		</script>
 	</body>

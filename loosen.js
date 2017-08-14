@@ -63,7 +63,6 @@
 			"mtch": "mtch",
 			"petrifi": "petrifi",
 			"plough": "plough",
-			"protype": "protype",
 			"shft": "shft",
 			"truly": "truly",
 			"U200b": "u200b",
@@ -85,7 +84,6 @@ const mrkd = require( "mrkd" );
 const mtch = require( "mtch" );
 const petrifi = require( "petrifi" );
 const plough = require( "plough" );
-const protype = require( "protype" );
 const shft = require( "shft" );
 const truly = require( "truly" );
 const U200b = require( "u200b" );
@@ -125,11 +123,11 @@ const push = function push( cache, key, element, limiter ){
 		@end-meta-configuration
 	*/
 
-	if( !protype( cache, OBJECT ) ){
+	if( typeof cache != "object" ){
 		throw new Error( "invalid cache" );
 	}
 
-	if( !protype( key, STRING ) ){
+	if( typeof key != "string" ){
 		throw new Error( "invalid key" );
 	}
 
@@ -164,7 +162,7 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 		@end-meta-configuration
 	*/
 
-	if( !protype( entity, OBJECT ) ){
+	if( typeof entity != "object" ){
 		throw new Error( "invalid entity" );
 	}
 
@@ -227,7 +225,7 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 		entity.forEach( function onEachElement( element, index ){
 			let key = U200b( path, index ).join( "." ).replace( REFERENCE_PATTERN, "" );
 
-			if( protype( element, OBJECT ) ){
+			if( typeof element == "object" ){
 				if( !compressed ){
 					push( cache, key, element, limiter );
 				}
@@ -251,7 +249,7 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 						let list = cache[ key ] = wichevr( cache[ key ], [ ] );
 						list.push( data );
 
-						if( protype( data, OBJECT ) ){
+						if( typeof data == "object" ){
 							loosen( data, key, cache, compressed, depth, limiter );
 						}
 					} );
@@ -262,7 +260,7 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 			}
 		} );
 
-	}else if( protype( entity, OBJECT ) ){
+	}else if( typeof entity == "object" ){
 		impel( FORMAT, OBJECT_FORMAT, cache );
 
 		Object.keys( entity )
@@ -271,7 +269,7 @@ const loosen = function loosen( entity, path, cache, compressed, depth, limiter 
 
 				key = U200b( path, key ).join( "." ).replace( REFERENCE_PATTERN, "" );
 
-				if( protype( element, OBJECT ) ){
+				if( typeof element == "object" ){
 					if( !compressed ){
 						push( cache, key, element, limiter );
 					}
