@@ -7,8 +7,11 @@
   "deploy": "loosen.deploy.js",
   "browser": "loosen.deploy.js",
   "scripts": {
-    "build": "babel loosen.js --out-file loosen.support.js --source-maps && webpack --progress --display-modules",
-    "test": "mocha loosen-test.js"
+	"pristine": "rsetmod clean && flxc execute ./.install.sh",
+	"clear": "rsetmod clean --clear",
+	"build": "babel loosen.js --out-file loosen.support.js --source-maps && webpack --progress --display-modules",
+	"pretest": "npm run clear && npm run build",
+	"test": "node loosen-test.js"
   },
   "repository": {
     "type": "git",
