@@ -1,98 +1,26 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>loosen unit test</title>
+		<meta charset="utf-8">
 
-		<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.3.2.css">
+		<title>test:loosen</title>
 
-		<script type="application/javascript" src="https://code.jquery.com/qunit/qunit-2.3.2.js"></script>
-
-		<script type="application/javascript" src="./bower_components/protype/protype.deploy.js"></script>
-
-		<script type="application/javascript" src="./loosen.deploy.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css"/>
 	</head>
 
 	<body>
-		<div id="qunit"></div>
+		<div id="mocha"></div>
 
-		<div id="qunit-fixture"></div>
+		<script type="application/javascript" src="https://unpkg.com/mocha/mocha.js"></script>
 
 		<script type="application/javascript">
-			QUnit.test( "loosen unit test", function( assert ) {
+			mocha.setup( "bdd" );
+		</script>
 
-				let test = {
-					"hello": {
-						"world": {
-							"yeah": 1,
-							"ugh": false,
-							"hi": [
-								{
-									"weeeh": {
-										"yehey": 123
-									}
-								},
-								{
-									"weeeh": {
-										"yehey": 1234
-									}
-								},
-								"hello world",
-								123,
-								{
-									"weeeeeeh": 12345
-								}
-							]
-						}
-					}
-				};
+		<script type="application/javascript" src="./test.deploy.js"></script>
 
-				console.log( loosen( test, true ) );
-
-				assert.equal( typeof loosen( test ), "object", "should be object data type" );
-
-				assert.ok( loosen( window, true, 1 ), "should only contain first level of loosened object" );
-
-				assert.ok( loosen( window, true, ( element ) => { return protype( element, FUNCTION ); } ),
-					"should be equal to loosened object containing function data only" );
-
-				/*
-				let test = {
-					"hello": {
-						"world": {
-							"yeah": 1,
-							"ugh": false,
-							"hi": [
-								{
-									"weeeh": {
-										"yehey": 123
-									}
-								},
-								{
-									"weeeh": {
-										"yehey": 1234
-									}
-								},
-								"hello world",
-								123,
-								{
-									"weeeeeeh": 12345
-								}
-							]
-						}
-					}
-				};
-
-				console.log( loosen( test, true ) );
-
-				assert.equal( typeof loosen( test ), "object", "should return 'object'" );
-
-				assert.ok( loosen( window, true, 1 ), "should only contain first level of loosened object" );
-
-				assert.ok( loosen( window, true, ( element ) => { return protype( element, FUNCTION ); } ),
-							"should return loosened object with elements that have function data type" );
-				*/
-
-			} );
+		<script type="application/javascript">
+			mocha.run( );
 		</script>
 	</body>
 </html>
