@@ -1,0 +1,180 @@
+{
+	"state": {
+		"passed": 4,
+		"failed": 0,
+		"skipped": 0
+	},
+	"start": "2017-09-05T09:32:18.474Z",
+	"end": "2017-09-05T09:32:55.753Z",
+	"capabilities": {
+		"browserName": "chrome",
+		"chromeOptions": {
+			"args": [
+				"disable-gpu",
+				"headless"
+			]
+		},
+		"proxy": null
+	},
+	"host": "127.0.0.1",
+	"port": 4444,
+	"baseUrl": "http://localhost",
+	"framework": "mocha",
+	"mochaOpts": {
+		"timeout": 10000,
+		"ui": "bdd"
+	},
+	"suites": [
+		{
+			"name": "loosen",
+			"duration": 0,
+			"start": "2017-09-05T09:32:54.848Z",
+			"tests": [],
+			"hooks": []
+		},
+		{
+			"name": "loosen",
+			"duration": 727,
+			"start": "2017-09-05T09:32:54.848Z",
+			"end": "2017-09-05T09:32:55.575Z",
+			"tests": [],
+			"hooks": [
+				{
+					"start": "2017-09-05T09:32:54.851Z",
+					"end": "2017-09-05T09:32:54.851Z",
+					"duration": 0,
+					"title": "\"before each\" hook",
+					"associatedSuite": "loosen",
+					"associatedTest": "should transform deep object into shallow object"
+				},
+				{
+					"start": "2017-09-05T09:32:55.043Z",
+					"end": "2017-09-05T09:32:55.043Z",
+					"duration": 0,
+					"title": "\"after each\" hook",
+					"associatedSuite": "loosen",
+					"associatedTest": "should transform deep object into shallow object"
+				},
+				{
+					"start": "2017-09-05T09:32:55.044Z",
+					"end": "2017-09-05T09:32:55.044Z",
+					"duration": 0,
+					"title": "\"before each\" hook",
+					"associatedSuite": "loosen",
+					"associatedTest": "should transform deep object into shallow object"
+				},
+				{
+					"start": "2017-09-05T09:32:55.107Z",
+					"end": "2017-09-05T09:32:55.107Z",
+					"duration": 0,
+					"title": "\"after each\" hook",
+					"associatedSuite": "loosen",
+					"associatedTest": "should transform deep object into shallow object"
+				},
+				{
+					"start": "2017-09-05T09:32:55.108Z",
+					"end": "2017-09-05T09:32:55.108Z",
+					"duration": 0,
+					"title": "\"before each\" hook",
+					"associatedSuite": "loosen",
+					"associatedTest": "should only contain first level of loosened object"
+				},
+				{
+					"start": "2017-09-05T09:32:55.363Z",
+					"end": "2017-09-05T09:32:55.363Z",
+					"duration": 0,
+					"title": "\"after each\" hook",
+					"associatedSuite": "loosen",
+					"associatedTest": "should only contain first level of loosened object"
+				},
+				{
+					"start": "2017-09-05T09:32:55.364Z",
+					"end": "2017-09-05T09:32:55.364Z",
+					"duration": 0,
+					"title": "\"before each\" hook",
+					"associatedSuite": "loosen",
+					"associatedTest": "should return loosened object containing function data only"
+				},
+				{
+					"start": "2017-09-05T09:32:55.575Z",
+					"end": "2017-09-05T09:32:55.575Z",
+					"duration": 0,
+					"title": "\"after each\" hook",
+					"associatedSuite": "loosen",
+					"associatedTest": "should return loosened object containing function data only"
+				},
+				{
+					"start": "2017-09-05T09:32:55.575Z",
+					"end": "2017-09-05T09:32:55.575Z",
+					"duration": 0,
+					"title": "\"after all\" hook",
+					"associatedSuite": "loosen"
+				}
+			]
+		},
+		{
+			"name": "`loosen with deep object as entity`",
+			"duration": 195,
+			"start": "2017-09-05T09:32:54.849Z",
+			"end": "2017-09-05T09:32:55.044Z",
+			"tests": [
+				{
+					"name": "should transform deep object into shallow object",
+					"start": "2017-09-05T09:32:54.850Z",
+					"end": "2017-09-05T09:32:55.043Z",
+					"duration": 193,
+					"state": "pass"
+				}
+			],
+			"hooks": []
+		},
+		{
+			"name": "`loosen with entity and compressed parameters`",
+			"duration": 63,
+			"start": "2017-09-05T09:32:55.044Z",
+			"end": "2017-09-05T09:32:55.107Z",
+			"tests": [
+				{
+					"name": "should transform deep object into shallow object",
+					"start": "2017-09-05T09:32:55.044Z",
+					"end": "2017-09-05T09:32:55.107Z",
+					"duration": 63,
+					"state": "pass"
+				}
+			],
+			"hooks": []
+		},
+		{
+			"name": "`loosen with entity, compressed, and depth parameters`",
+			"duration": 257,
+			"start": "2017-09-05T09:32:55.107Z",
+			"end": "2017-09-05T09:32:55.364Z",
+			"tests": [
+				{
+					"name": "should only contain first level of loosened object",
+					"start": "2017-09-05T09:32:55.108Z",
+					"end": "2017-09-05T09:32:55.363Z",
+					"duration": 255,
+					"state": "pass"
+				}
+			],
+			"hooks": []
+		},
+		{
+			"name": "`loosen with entity, compressed and limiter parameters`",
+			"duration": 211,
+			"start": "2017-09-05T09:32:55.364Z",
+			"end": "2017-09-05T09:32:55.575Z",
+			"tests": [
+				{
+					"name": "should return loosened object containing function data only",
+					"start": "2017-09-05T09:32:55.364Z",
+					"end": "2017-09-05T09:32:55.575Z",
+					"duration": 211,
+					"state": "pass"
+				}
+			],
+			"hooks": []
+		}
+	]
+}

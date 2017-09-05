@@ -67,27 +67,308 @@ const path = require( "path" );
 
 
 //: @server:
-
 describe( "loosen", ( ) => {
 
-} );
+	describe( "`loosen with deep object as entity`", ( ) => {
+		it( "should transform deep object into shallow object", ( ) => {
+			let data = {
+				"hello": {
+					"world": {
+						"yeah": 1,
+						"ugh": false,
+						"hi": [
+							{
+								"weeeh": {
+									"yehey": 123
+								}
+							},
+							{
+								"weeeh": {
+									"yehey": 1234
+								}
+							},
+							"hello world",
+							123,
+							{
+								"weeeeeeh": 12345
+							}
+						]
+					}
+				}
+			};
 
+			let result = loosen( data );
+
+			assert.equal( Object.keys( result ).length, 17 );
+		} );
+	} );
+
+	describe( "`loosen with entity and compressed parameters`", ( ) => {
+		it( "should transform deep object into shallow object", ( ) => {
+			let data = {
+				"hello": {
+					"world": {
+						"yeah": 1,
+						"ugh": false,
+						"hi": [
+							{
+								"weeeh": {
+									"yehey": 123
+								}
+							},
+							{
+								"weeeh": {
+									"yehey": 1234
+								}
+							},
+							"hello world",
+							123,
+							{
+								"weeeeeeh": 12345
+							}
+						]
+					}
+				}
+			};
+
+			let result = loosen( data, true );
+
+			assert.equal( Object.keys( result ).length, 7 );
+		} );
+	} );
+
+	describe( "`loosen with entity, compressed, and depth parameters`", ( ) => {
+		it( "should only contain first level of loosened object", ( ) => {
+			let result = loosen( global, true, 1 );
+
+			assert.equal( Object.keys( result ).length, 85 );
+		} );
+	} );
+
+	describe( "`loosen with entity, compressed and limiter parameters`", ( ) => {
+		it( "should return loosened object containing function data only", ( ) => {
+			let result = loosen( global, true, ( element ) => { return typeof element == "function"; } );
+
+			assert.equal( Object.keys( result ).length, 3226 );
+		} ).timeout( 15000 );
+	} );
+
+} );
 //: @end-server
 
 
 //: @client:
-
 describe( "loosen", ( ) => {
 
-} );
+	describe( "`loosen with deep object as entity`", ( ) => {
+		it( "should transform deep object into shallow object", ( ) => {
+			let data = {
+				"hello": {
+					"world": {
+						"yeah": 1,
+						"ugh": false,
+						"hi": [
+							{
+								"weeeh": {
+									"yehey": 123
+								}
+							},
+							{
+								"weeeh": {
+									"yehey": 1234
+								}
+							},
+							"hello world",
+							123,
+							{
+								"weeeeeeh": 12345
+							}
+						]
+					}
+				}
+			};
 
+			let result = loosen( data );
+
+			assert.equal( Object.keys( result ).length, 17 );
+		} );
+	} );
+
+	describe( "`loosen with entity and compressed parameters`", ( ) => {
+		it( "should transform deep object into shallow object", ( ) => {
+			let data = {
+				"hello": {
+					"world": {
+						"yeah": 1,
+						"ugh": false,
+						"hi": [
+							{
+								"weeeh": {
+									"yehey": 123
+								}
+							},
+							{
+								"weeeh": {
+									"yehey": 1234
+								}
+							},
+							"hello world",
+							123,
+							{
+								"weeeeeeh": 12345
+							}
+						]
+					}
+				}
+			};
+
+			let result = loosen( data, true );
+
+			assert.equal( Object.keys( result ).length, 7 );
+		} );
+	} );
+
+	describe( "`loosen with entity, compressed, and depth parameters`", ( ) => {
+		it( "should only contain first level of loosened object", ( ) => {
+			let result = loosen( window, true, 1 );
+
+			assert.equal( Object.keys( result ).length, 120 );
+		} );
+	} );
+
+	describe( "`loosen with entity, compressed and limiter parameters`", ( ) => {
+		it( "should return loosened object containing function data only", ( ) => {
+			let result = loosen( window, true, ( element ) => { return typeof element == "function"; } );
+
+			assert.equal( Object.keys( result ).length, 45 );
+		} ).timeout( 15000 );
+	} );
+
+} );
 //: @end-client
 
 
 //: @bridge:
-
 describe( "loosen", ( ) => {
 
-} );
+	let bridgeURL = `file://${ path.resolve( __dirname, "bridge.html" ) }`;
 
+	describe( "`loosen with deep object as entity`", ( ) => {
+		it( "should transform deep object into shallow object", ( ) => {
+			//: @ignore:
+			let result = browser.url( bridgeURL ).execute(
+
+				function( ){
+					let data = {
+						"hello": {
+							"world": {
+								"yeah": 1,
+								"ugh": false,
+								"hi": [
+									{
+										"weeeh": {
+											"yehey": 123
+										}
+									},
+									{
+										"weeeh": {
+											"yehey": 1234
+										}
+									},
+									"hello world",
+									123,
+									{
+										"weeeeeeh": 12345
+									}
+								]
+							}
+						}
+					};
+
+					let test = loosen( data );
+
+					return Object.keys( test ).length;
+				}
+
+			).value;
+			//: @end-ignore
+			assert.equal( result, 17 );
+		} );
+	} );
+
+	describe( "`loosen with entity and compressed parameters`", ( ) => {
+		it( "should transform deep object into shallow object", ( ) => {
+			//: @ignore:
+			let result = browser.url( bridgeURL ).execute(
+
+				function( ){
+					let data = {
+						"hello": {
+							"world": {
+								"yeah": 1,
+								"ugh": false,
+								"hi": [
+									{
+										"weeeh": {
+											"yehey": 123
+										}
+									},
+									{
+										"weeeh": {
+											"yehey": 1234
+										}
+									},
+									"hello world",
+									123,
+									{
+										"weeeeeeh": 12345
+									}
+								]
+							}
+						}
+					};
+
+					let test = loosen( data, true );
+					return Object.keys( test ).length;
+				}
+
+			).value;
+			//: @end-ignore
+			assert.equal( result, 7 );
+		} );
+	} );
+
+	describe( "`loosen with entity, compressed, and depth parameters`", ( ) => {
+		it( "should only contain first level of loosened object", ( ) => {
+			//: @ignore:
+			let result = browser.url( bridgeURL ).execute(
+
+				function( ){
+					let test = loosen( window, true, 1 );
+					return Object.keys( test ).length;
+				}
+
+			).value;
+			//: @end-ignore
+			assert.equal( result, 98 );
+		} );
+	} );
+
+	describe( "`loosen with entity, compressed and limiter parameters`", ( ) => {
+		it( "should return loosened object containing function data only", ( ) => {
+			//: @ignore:
+			let result = browser.url( bridgeURL ).execute(
+
+				function( ){
+					let test = loosen( window, true, ( element ) => { return typeof element == "function"; } );
+					return Object.keys( test ).length;
+				}
+
+			).value;
+			//: @end-ignore
+			assert.equal( result, 47 );
+		} ).timeout( 15000 );
+	} );
+
+} );
 //: @end-bridge
